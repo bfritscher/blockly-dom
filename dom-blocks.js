@@ -175,9 +175,13 @@ Blockly.JavaScript['text_node'] = function(block) {
 
 Blockly.Blocks['handle_event'] = {
   init: function() {
-    this.appendValueInput('TARGET').setCheck('Element')
-      .appendField('when');
-    this.appendStatementInput('STACK').appendField('is clicked');
+    this.appendValueInput("TARGET")
+        .setCheck("Element")
+        .appendField("when");
+    this.appendStatementInput("STACK")
+        .setCheck(null)
+        .appendField(new Blockly.FieldDropdown([["is clicked","click"], ["is loaded","load"], ["has changed","change"], ["mouse enter","mouseenter"], ["mouse leave","mouseleave"], ["form is submitted","submit"]]), "TYPE");
+    this.setColour(30);
   }
 };
 
@@ -197,7 +201,10 @@ Blockly.JavaScript['handle_event'] = function(block) {
         '\'' + block.id + '\'') + branch;
   }
   return [
-    target + '.addEventListener("click", function() {\n' +
+    target + '.addEventListener("' + block.getFieldValue('TYPE') + '", function() {\n' +
+    branch + '});\n'
+  ];
+};
     branch + '});\n'
   ];
 };
