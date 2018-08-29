@@ -205,6 +205,45 @@ Blockly.JavaScript['handle_event'] = function(block) {
     branch + '});\n'
   ];
 };
+
+Blockly.Blocks['handle_mouse_move'] = {
+  init: function() {
+    this.appendValueInput("TARGET")
+        .setCheck("Element")
+        .appendField("when mouse moved on");
+    this.appendDummyInput()
+        .appendField("with")
+        .appendField(new Blockly.FieldVariable("x"), "x")
+        .appendField(new Blockly.FieldVariable("y"), "y");
+    this.appendStatementInput("STACK")
+        .setCheck(null);
+    this.setColour(30);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.JavaScript['handle_mouse_move'] = function(block) {
+  var target = Blockly.JavaScript.valueToCode(
+    block, 'TARGET',
+    Blockly.JavaScript.ORDER_ATOMIC
+  );
+  var variable_x = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('x'), Blockly.Variables.NAME_TYPE);
+  var variable_y = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('y'), Blockly.Variables.NAME_TYPE);
+  var branch = Blockly.JavaScript.statementToCode(block, 'STACK');
+  if (Blockly.JavaScript.STATEMENT_PREFIX) {
+    branch = Blockly.JavaScript.prefixLines(
+        Blockly.JavaScript.STATEMENT_PREFIX.replace(/%1/g,
+        '\'' + block.id + '\''), Blockly.JavaScript.INDENT) + branch;
+  }
+  if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
+    branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
+        '\'' + block.id + '\'') + branch;
+  }
+  return [
+    target + '.addEventListener("mousemove", function(e) {\n  ' +
+    variable_x + ' = e.clientX;\n  ' +
+    variable_y + ' = e.clientY;\n' +
     branch + '});\n'
   ];
 };
