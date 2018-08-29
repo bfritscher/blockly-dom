@@ -326,3 +326,21 @@ Blockly.JavaScript['wait'] = function(block) {
   var number_time = block.getFieldValue('TIME');
   return 'await wait(' + number_time * 1000 + ');\n';
 };
+
+Blockly.Blocks['console_log'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setCheck(null)
+        .appendField("console output");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(30);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.JavaScript['console_log'] = function(block) {
+  return 'console.log(' + Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC) + ');\n';
+};
+
