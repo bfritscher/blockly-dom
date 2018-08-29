@@ -2,14 +2,8 @@ Blockly.Blocks['create_element'] = {
   init: function() {
     this.setOutput(true, 'Element');
     this.appendDummyInput().appendField('a new')
-      .appendField(new Blockly.FieldDropdown([
-        ['<p>', 'p'],
-        ['<span>', 'span'],
-        ['<div>', 'div'],
-        ['<ul>', 'ul'],
-        ['<ol>', 'ol'],
-        ['<li>', 'li']
-      ]), 'TAG').appendField('element');
+      .appendField(new Blockly.FieldTextInput("p"), "TAG")
+      .appendField('element');
   }
 };
 
