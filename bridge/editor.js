@@ -7,7 +7,7 @@
   // This can be used by developers from the debug console.
   window.getWorkspaceXml = function() {
     var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-    return Blockly.Xml.domToPrettyText(xml);    
+    return Blockly.Xml.domToPrettyText(xml);
   };
 
   function getWorkspaceCompressed() {
@@ -54,10 +54,14 @@
 
   var lastStoredScript = null;
 
+  function getWorkspaceCode() {
+    return '(async () => {\n' + Blockly.JavaScript.workspaceToCode() + '\n})();\n';
+  }
+
   function storeScript() {
     JSONStorage.set('editor_active', true);
 
-    var currScript = Blockly.JavaScript.workspaceToCode();
+    var currScript = getWorkspaceCode();
 
     if (currScript !== lastStoredScript) {
       lastStoredScript = currScript;
@@ -68,7 +72,7 @@
   var editor = null;
 
   function generateViewSourceCode() {
-    var js = Blockly.JavaScript.workspaceToCode();
+    var js = getWorkspaceCode();
 
     if ($('#include-blockly-source')[0].checked) {
       js = 'if (!sessionStorage.USE_BLOCKLY_CODE) {\n' + js + '}\n' + [
