@@ -248,6 +248,45 @@ Blockly.JavaScript['handle_mouse_move'] = function(block) {
   ];
 };
 
+Blockly.Blocks['handle_key_press'] = {
+  init: function() {
+    this.appendValueInput("TARGET")
+        .setCheck("Element")
+        .appendField("when key pressed on");
+    this.appendDummyInput()
+        .appendField("with")
+        .appendField(new Blockly.FieldVariable("key"), "key");
+    this.appendStatementInput("STACK")
+        .setCheck(null);
+    this.setColour(30);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.JavaScript['handle_key_press'] = function(block) {
+  var target = Blockly.JavaScript.valueToCode(
+    block, 'TARGET',
+    Blockly.JavaScript.ORDER_ATOMIC
+  );
+  var variable_key = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('key'), Blockly.Variables.NAME_TYPE);
+  var branch = Blockly.JavaScript.statementToCode(block, 'STACK');
+  if (Blockly.JavaScript.STATEMENT_PREFIX) {
+    branch = Blockly.JavaScript.prefixLines(
+        Blockly.JavaScript.STATEMENT_PREFIX.replace(/%1/g,
+        '\'' + block.id + '\''), Blockly.JavaScript.INDENT) + branch;
+  }
+  if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
+    branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
+        '\'' + block.id + '\'') + branch;
+  }
+  return [
+    target + '.addEventListener("keypress", function(e) {\n  ' +
+    variable_key + ' = e.key;\n' +
+    branch + '});\n'
+  ];
+};
+
 Blockly.Blocks['input_value'] = {
   init: function() {
     this.setOutput(true, 'String');
