@@ -92,6 +92,49 @@ Blockly.JavaScript['append_element'] = function(block) {
   return parent + '.appendChild(' + child + ');\n';
 };
 
+Blockly.Blocks['remove_child_element'] = {
+  init: function() {
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this
+      .appendValueInput('CHILD').setCheck(['Element', 'TextNode'])
+      .appendField('remove');
+    this
+      .appendValueInput('PARENT').setCheck('Element')
+      .appendField('from');
+  }
+};
+
+Blockly.JavaScript['remove_child_element'] = function(block) {
+  var parent = Blockly.JavaScript.valueToCode(
+    block, 'PARENT',
+    Blockly.JavaScript.ORDER_ATOMIC
+  );
+  var child = Blockly.JavaScript.valueToCode(
+    block, 'CHILD',
+    Blockly.JavaScript.ORDER_ATOMIC
+  );
+  return parent + '.removeChild(' + child + ');\n';
+};
+
+Blockly.Blocks['remove_element'] = {
+  init: function() {
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this
+    .appendValueInput('ELEMENT').setCheck(['Element', 'TextNode'])
+    .appendField('remove element');
+  }
+};
+
+Blockly.JavaScript['remove_element'] = function(block) {
+  var parent = Blockly.JavaScript.valueToCode(
+    block, 'ELEMENT',
+    Blockly.JavaScript.ORDER_ATOMIC
+  );
+  return parent + '.remove();\n';
+};
+
 Blockly.Blocks['set_css_colour'] = {
   init: function() {
     this.setPreviousStatement(true);
