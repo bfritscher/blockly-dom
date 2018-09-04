@@ -1,9 +1,12 @@
+Blockly.Msg["DOM_HUE"] = "230";
+
 Blockly.Blocks['create_element'] = {
   init: function() {
     this.setOutput(true, 'Element');
     this.appendDummyInput().appendField('a new')
-      .appendField(new Blockly.FieldTextInput("p"), "TAG")
+      .appendField(new Blockly.FieldTextInput('p'), 'TAG')
       .appendField('element');
+    this.setColour(Blockly.Msg['DOM_HUE']);
   }
 };
 
@@ -26,6 +29,7 @@ Blockly.Blocks['query_selector'] = {
     this.appendDummyInput().appendField('the')
       .appendField(new Blockly.FieldDropdown(selectors), 'SELECTOR')
       .appendField('element');
+    this.setColour(Blockly.Msg['DOM_HUE']);
   }
 };
 
@@ -42,6 +46,7 @@ Blockly.Blocks['get_element_by_id'] = {
     this.setOutput(true, 'Element');
     this.appendDummyInput().appendField('the element with id')
       .appendField(new Blockly.FieldTextInput('foo'), 'ID');
+    this.setColour(Blockly.Msg['DOM_HUE']);
   }
 };
 
@@ -57,6 +62,7 @@ Blockly.Blocks['body_element'] = {
   init: function() {
     this.setOutput(true, 'Element');
     this.appendDummyInput().appendField('the <body> element');
+    this.setColour(Blockly.Msg['DOM_HUE']);
   }
 };
 
@@ -73,10 +79,11 @@ Blockly.Blocks['append_element'] = {
     this.setNextStatement(true);
     this
       .appendValueInput('CHILD').setCheck(['Element', 'TextNode'])
-      .appendField('append');
+      .appendField('append element');
     this
       .appendValueInput('PARENT').setCheck('Element')
-      .appendField('to');
+      .appendField('to element');
+    this.setColour(Blockly.Msg['DOM_HUE']);
   }
 };
 
@@ -98,10 +105,11 @@ Blockly.Blocks['remove_child_element'] = {
     this.setNextStatement(true);
     this
       .appendValueInput('CHILD').setCheck(['Element', 'TextNode'])
-      .appendField('remove');
+      .appendField('remove element');
     this
       .appendValueInput('PARENT').setCheck('Element')
-      .appendField('from');
+      .appendField('from element');
+    this.setColour(Blockly.Msg['DOM_HUE']);
   }
 };
 
@@ -124,6 +132,7 @@ Blockly.Blocks['remove_element'] = {
     this
     .appendValueInput('ELEMENT').setCheck(['Element', 'TextNode'])
     .appendField('remove element');
+    this.setColour(Blockly.Msg['DOM_HUE']);
   }
 };
 
@@ -140,17 +149,18 @@ Blockly.Blocks['set_css_colour'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this
-      .appendDummyInput().appendField('set the')
+      .appendValueInput('ELEMENT').setCheck('Element')
+      .appendField('set the')
       .appendField(new Blockly.FieldDropdown([
         ['background', 'backgroundColor'],
         ['color', 'color']
-      ]), 'PROPERTY');
-    this
-      .appendValueInput('ELEMENT').setCheck('Element')
-      .appendField('of');
+      ]), 'PROPERTY')
+      .appendField('of element');
     this
       .appendValueInput('COLOUR').setCheck('Colour')
+      .setAlign(Blockly.ALIGN_RIGHT)
       .appendField('to');
+    this.setColour(Blockly.Msg['DOM_HUE']);
   }
 };
 
@@ -172,17 +182,18 @@ Blockly.Blocks['set_content'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this
-      .appendDummyInput().appendField('set the')
+      .appendValueInput('ELEMENT').setCheck('Element')
+      .appendField('set the')
       .appendField(new Blockly.FieldDropdown([
         ['text', 'textContent'],
         ['html', 'innerHTML']
-      ]), 'TYPE');
-    this
-      .appendValueInput('ELEMENT').setCheck('Element')
-      .appendField('of');
+      ]), 'TYPE')
+      .appendField('of element');
     this
       .appendValueInput('VALUE').setCheck('String')
+      .setAlign(Blockly.ALIGN_RIGHT)
       .appendField('to');
+    this.setColour(Blockly.Msg['DOM_HUE']);
   }
 };
 
@@ -204,6 +215,7 @@ Blockly.Blocks['text_node'] = {
     this.appendValueInput('TEXT').setCheck('String')
       .appendField('a new text node with');
     this.setOutput(true, 'TextNode');
+    this.setColour(Blockly.Msg['DOM_HUE']);
   }
 };
 
@@ -220,11 +232,13 @@ Blockly.Blocks['handle_event'] = {
   init: function() {
     this.appendValueInput("TARGET")
         .setCheck("Element")
-        .appendField("when");
+        .appendField("when element");
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([["is clicked","click"], ["is loaded","load"], ["has changed","change"], ["mouse enter","mouseenter"], ["mouse leave","mouseleave"], ["form is submitted","submit"]]), "TYPE");
     this.appendStatementInput("STACK")
         .setCheck(null)
-        .appendField(new Blockly.FieldDropdown([["is clicked","click"], ["is loaded","load"], ["has changed","change"], ["mouse enter","mouseenter"], ["mouse leave","mouseleave"], ["form is submitted","submit"]]), "TYPE");
-    this.setColour(30);
+        .appendField('do');
+    this.setColour(Blockly.Msg['DOM_HUE']);
   }
 };
 
@@ -253,14 +267,15 @@ Blockly.Blocks['handle_mouse_move'] = {
   init: function() {
     this.appendValueInput("TARGET")
         .setCheck("Element")
-        .appendField("when mouse moved on");
+        .appendField("when mouse moved on element");
     this.appendDummyInput()
         .appendField("with")
         .appendField(new Blockly.FieldVariable("x"), "x")
         .appendField(new Blockly.FieldVariable("y"), "y");
     this.appendStatementInput("STACK")
-        .setCheck(null);
-    this.setColour(30);
+        .setCheck(null)
+        .appendField('do');
+    this.setColour(Blockly.Msg['DOM_HUE']);
  this.setTooltip("");
  this.setHelpUrl("");
   }
@@ -295,13 +310,14 @@ Blockly.Blocks['handle_key_press'] = {
   init: function() {
     this.appendValueInput("TARGET")
         .setCheck("Element")
-        .appendField("when key pressed on");
+        .appendField("when key pressed on element");
     this.appendDummyInput()
         .appendField("with")
         .appendField(new Blockly.FieldVariable("key"), "key");
     this.appendStatementInput("STACK")
-        .setCheck(null);
-    this.setColour(30);
+        .setCheck(null)
+        .appendField('do');
+    this.setColour(Blockly.Msg['DOM_HUE']);
  this.setTooltip("");
  this.setHelpUrl("");
   }
@@ -334,7 +350,8 @@ Blockly.Blocks['input_value'] = {
   init: function() {
     this.setOutput(true, 'String');
     this.appendValueInput('ELEMENT').setCheck('Element')
-      .appendField('the input value of');
+      .appendField('the input value of element');
+    this.setColour(Blockly.Msg['DOM_HUE']);
   }
 };
 
@@ -354,7 +371,7 @@ Blockly.Blocks['console_log'] = {
         .appendField("console output");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(30);
+    this.setColour(Blockly.Msg['DOM_HUE']);
  this.setTooltip("");
  this.setHelpUrl("");
   }
@@ -366,18 +383,18 @@ Blockly.JavaScript['console_log'] = function(block) {
 
 Blockly.Blocks['set_html_attribute'] = {
   init: function() {
-    this.appendDummyInput()
-        .appendField("set attribute")
-        .appendField(new Blockly.FieldTextInput(""), "NAME");
     this.appendValueInput("ELEMENT")
         .setCheck("Element")
-        .appendField("of");
+        .appendField("set attribute")
+        .appendField(new Blockly.FieldTextInput(""), "NAME")
+        .appendField("of element");
     this.appendValueInput("VALUE")
         .setCheck("String")
+        .setAlign(Blockly.ALIGN_RIGHT)
         .appendField("to");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(230);
+    this.setColour(Blockly.Msg['DOM_HUE']);
   }
 };
 
@@ -400,9 +417,9 @@ Blockly.Blocks['get_html_attribute'] = {
         .setCheck("Element")
         .appendField("get attribute")
         .appendField(new Blockly.FieldTextInput(""), "NAME")
-        .appendField("of");
+        .appendField("of element");
     this.setOutput(true, null);
-    this.setColour(230);
+    this.setColour(Blockly.Msg['DOM_HUE']);
  this.setTooltip("");
  this.setHelpUrl("");
   }
@@ -416,19 +433,19 @@ Blockly.JavaScript['get_html_attribute'] = function(block) {
 
 Blockly.Blocks['get_json'] = {
   init: function() {
-    this.appendValueInput("URL")
+    this.appendValueInput('URL')
         .setCheck("String")
-        .appendField("get JSON from");
+        .appendField('get JSON from');
     this.appendDummyInput()
-        .appendField("into")
-        .appendField(new Blockly.FieldVariable("json"), "JSON");
-    this.appendStatementInput("CALLBACK")
+        .appendField('into')
+        .appendField(new Blockly.FieldVariable('json'), 'JSON');
+    this.appendStatementInput('CALLBACK')
         .setCheck(null)
-        .appendField("do");
+        .appendField('do');
     this.setPreviousStatement(true, null);
-    this.setColour(30);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setColour(Blockly.Msg['DOM_HUE']);
+ this.setTooltip('');
+ this.setHelpUrl('');
   }
 };
 
@@ -440,6 +457,12 @@ Blockly.JavaScript['get_json'] = function(block) {
   return code;
 };
 
+
+Blockly.Msg["DICTS_HUE"] = "10";
+Blockly.Msg["DICTS_CREATE_WITH_HELPURL"] = "";
+Blockly.Msg["DICTS_CREATE_EMPTY_TITLE"] = "create empty dictionnary";
+Blockly.Msg["DICTS_CREATE_WITH_CONTAINER_TITLE_ADD"] = "dictionnary";
+Blockly.Msg["DICTS_CREATE_WITH_CONTAINER_TOOLTIP"] = "Add, remove, or reorder sections to reconfigure this dictionnary block.";
 Blockly.Msg["DICTS_CREATE_WITH_INPUT_WITH"] = "create dictionnary with";
 Blockly.Msg["DICTS_CREATE_WITH_ITEM_TOOLTIP"] = "Add a key/value to the dictionnary.";
 Blockly.Msg["DICTS_CREATE_WITH_ITEM_TITLE"] = "key: value";
