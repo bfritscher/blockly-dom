@@ -722,6 +722,27 @@ Blockly.JavaScript['dicts_controls_foreach'] = function(block) {
   return code;
 };
 
+Blockly.Blocks['dicts_has_key'] = {
+  init: function() {
+    this.appendValueInput("DICT")
+        .setCheck(null);
+    this.appendValueInput("KEY")
+        .setCheck("String")
+        .appendField("has key");
+    this.setInputsInline(true);
+    this.setOutput(true, "Boolean");
+    this.setColour(Blockly.Msg['LOOPS_HUE']);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.JavaScript['dicts_has_key'] = function(block) {
+  var dict = Blockly.JavaScript.valueToCode(block, 'DICT', Blockly.JavaScript.ORDER_ATOMIC);
+  var key = Blockly.JavaScript.valueToCode(block, 'KEY', Blockly.JavaScript.ORDER_ATOMIC);
+  var code = dict + '.hasOwnProperty(' + key + ')';
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
 
 
 Blockly.Blocks['math_to_number'] = {
