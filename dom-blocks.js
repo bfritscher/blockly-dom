@@ -436,3 +436,30 @@ Blockly.JavaScript['get_html_attribute'] = function(block) {
   var code = element + '.getAttribute("' + block.getFieldValue('NAME') + '")';
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
+
+Blockly.Blocks['get_json'] = {
+  init: function() {
+    this.appendValueInput("URL")
+        .setCheck("String")
+        .appendField("get JSON from");
+    this.appendDummyInput()
+        .appendField("into")
+        .appendField(new Blockly.FieldVariable("json"), "JSON");
+    this.appendStatementInput("CALLBACK")
+        .setCheck(null)
+        .appendField("do");
+    this.setPreviousStatement(true, null);
+    this.setColour(30);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.JavaScript['get_json'] = function(block) {
+  var url = Blockly.JavaScript.valueToCode(block, 'URL', Blockly.JavaScript.ORDER_ATOMIC);
+  var json = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('JSON'), Blockly.Variables.NAME_TYPE);
+  var callback = Blockly.JavaScript.statementToCode(block, 'CALLBACK');
+  var code = 'fetch(' + url + ')\n.then(res => res.json())\n.then((' + json + ') => {\n' + callback + '});\n';
+  return code;
+};
+
