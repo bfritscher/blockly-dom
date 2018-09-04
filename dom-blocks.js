@@ -1,4 +1,4 @@
-Blockly.Msg["DOM_HUE"] = "230";
+Blockly.Msg["DOM_HUE"] = "30";
 
 Blockly.Blocks['create_element'] = {
   init: function() {
@@ -458,7 +458,7 @@ Blockly.JavaScript['get_json'] = function(block) {
 };
 
 
-Blockly.Msg["DICTS_HUE"] = "10";
+Blockly.Msg["DICTS_HUE"] = "250";
 Blockly.Msg["DICTS_CREATE_WITH_HELPURL"] = "";
 Blockly.Msg["DICTS_CREATE_EMPTY_TITLE"] = "create empty dictionnary";
 Blockly.Msg["DICTS_CREATE_WITH_CONTAINER_TITLE_ADD"] = "dictionnary";
@@ -731,7 +731,7 @@ Blockly.Blocks['dicts_has_key'] = {
         .appendField("has key");
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
-    this.setColour(Blockly.Msg['LOOPS_HUE']);
+    this.setColour(Blockly.Msg['DICTS_HUE']);
  this.setTooltip("");
  this.setHelpUrl("");
   }
