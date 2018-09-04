@@ -347,29 +347,6 @@ Blockly.JavaScript['input_value'] = function(block) {
   ];
 };
 
-Blockly.Blocks['wait'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("wait")
-        .appendField(new Blockly.FieldNumber(1, 0, 5), "TIME");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(230);
- this.setTooltip("wait");
- this.setHelpUrl("");
-  }
-};
-
-Blockly.JavaScript['wait'] = function(block) {
-  var wait = Blockly.JavaScript.provideFunction_(
-    'wait',
-    [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(time) {',
-      '  return new Promise(resolve => setTimeout(resolve, time));',
-      '}']);
-  var number_time = block.getFieldValue('TIME');
-  return 'await wait(' + number_time * 1000 + ');\n';
-};
-
 Blockly.Blocks['console_log'] = {
   init: function() {
     this.appendValueInput("NAME")

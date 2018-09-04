@@ -55,7 +55,7 @@
   var lastStoredScript = null;
 
   function getWorkspaceCode() {
-    return '(async () => {\n' + Blockly.JavaScript.workspaceToCode() + '\n})();\n';
+    return Blockly.JavaScript.workspaceToCode();
   }
 
   function storeScript() {
