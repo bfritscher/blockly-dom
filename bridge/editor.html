@@ -4,542 +4,552 @@
 <link rel="stylesheet" href="../vendor/codemirror/codemirror.css">
 <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.css">
 <style>
-html, body {
-  background-color: #fff;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow: hidden;
-}
+    html,
+    body {
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+    }
 
-#blockly {
-  height: 100%;
-  width: 100%;
-  position: relative;
-}
+    #blockly {
+        height: 100%;
+        width: 100%;
+        position: relative;
+    }
 
-.blocklySvg {
-  height: 100%;
-  width: 100%;
-}
+    .blocklySvg {
+        height: 100%;
+        width: 100%;
+    }
 
-#play {
-  background-color: green;
-  color: white;
-}
+    #play {
+        background-color: green;
+        color: white;
+    }
 
-#play:hover {
-  background-color: limegreen;
-}
+    #play:hover {
+        background-color: limegreen;
+    }
 
-ul.toolbar {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  z-index: 10;
-}
+    ul.toolbar {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        z-index: 10;
+    }
 
-#source textarea {
-  font-family: monospace;
-  font-size: 12px;
-}
+    #source textarea {
+        font-family: monospace;
+        font-size: 12px;
+    }
 
-#source-code-holder {
-  border: 1px solid black;
-}
+    #source-code-holder {
+        border: 1px solid black;
+    }
 </style>
+
 <body>
-  <div id="blockly">
-    <ul class="toolbar list-unstyled list-inline">
-      <li><a href="./" class="btn btn-default" target="_blank" title="Learn more about this editor"><i class="fa fa-question-circle"></i></a></li>
-      <li><button id="view-source" class="btn btn-default" title="View the JS translation">JS</button></li>
-      <li><button id="play" class="btn" title="Play (Ctrl+space)"><i class="fa fa-play"></i></button></li>
-    </ul>
-    <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
-        <category name="Logic" colour="#5C81A6">
-          <block type="controls_if"></block>
-          <block type="logic_compare">
-            <field name="OP">EQ</field>
-          </block>
-          <block type="logic_operation">
-            <field name="OP">AND</field>
-          </block>
-          <block type="logic_negate"></block>
-          <block type="logic_boolean">
-            <field name="BOOL">TRUE</field>
-          </block>
-          <block type="logic_null"></block>
-          <block type="logic_ternary"></block>
-        </category>
-        <category name="Loops" colour="#5CA65C">
-          <block type="controls_repeat_ext">
-            <value name="TIMES">
-              <shadow type="math_number">
-                <field name="NUM">10</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="controls_whileUntil">
-            <field name="MODE">WHILE</field>
-          </block>
-          <block type="controls_for">
-            <field name="VAR" id="#)Cw^?d210q$}Y,vZR33" variabletype="">i</field>
-            <value name="FROM">
-              <shadow type="math_number">
-                <field name="NUM">1</field>
-              </shadow>
-            </value>
-            <value name="TO">
-              <shadow type="math_number">
-                <field name="NUM">10</field>
-              </shadow>
-            </value>
-            <value name="BY">
-              <shadow type="math_number">
-                <field name="NUM">1</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="controls_forEach">
-            <field name="VAR" id="md{6wSRW:EXzwsDkMs#T" variabletype="">j</field>
-          </block>
-          <block type="dicts_controls_foreach">
-
-          </block>
-          <block type="controls_flow_statements">
-            <field name="FLOW">BREAK</field>
-          </block>
-        </category>
-        <category name="Math" colour="#5C68A6">
-          <block type="math_round">
-            <field name="OP">ROUND</field>
-            <value name="NUM">
-              <shadow type="math_number">
-                <field name="NUM">3.1</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="math_number">
-            <field name="NUM">0</field>
-          </block>
-          <block type="math_to_number">
-            <value name="VALUE">
-                <shadow type="text">
-                    <field name="TEXT">3.1</field>
-                </shadow>
-            </value>
-            </block>
-          <block type="math_single">
-            <field name="OP">ROOT</field>
-            <value name="NUM">
-              <shadow type="math_number">
-                <field name="NUM">9</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="math_trig">
-            <field name="OP">SIN</field>
-            <value name="NUM">
-              <shadow type="math_number">
-                <field name="NUM">45</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="math_constant">
-            <field name="CONSTANT">PI</field>
-          </block>
-          <block type="math_number_property">
-            <mutation divisor_input="false"></mutation>
-            <field name="PROPERTY">EVEN</field>
-            <value name="NUMBER_TO_CHECK">
-              <shadow type="math_number">
-                <field name="NUM">0</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="math_arithmetic">
-            <field name="OP">ADD</field>
-            <value name="A">
-              <shadow type="math_number">
-                <field name="NUM">1</field>
-              </shadow>
-            </value>
-            <value name="B">
-              <shadow type="math_number">
-                <field name="NUM">1</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="math_on_list">
-            <mutation op="SUM"></mutation>
-            <field name="OP">SUM</field>
-          </block>
-          <block type="math_modulo">
-            <value name="DIVIDEND">
-              <shadow type="math_number">
-                <field name="NUM">64</field>
-              </shadow>
-            </value>
-            <value name="DIVISOR">
-              <shadow type="math_number">
-                <field name="NUM">10</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="math_constrain">
-            <value name="VALUE">
-              <shadow type="math_number">
-                <field name="NUM">50</field>
-              </shadow>
-            </value>
-            <value name="LOW">
-              <shadow type="math_number">
-                <field name="NUM">1</field>
-              </shadow>
-            </value>
-            <value name="HIGH">
-              <shadow type="math_number">
-                <field name="NUM">100</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="math_random_int">
-            <value name="FROM">
-              <shadow type="math_number">
-                <field name="NUM">1</field>
-              </shadow>
-            </value>
-            <value name="TO">
-              <shadow type="math_number">
-                <field name="NUM">100</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="math_random_float"></block>
-        </category>
-        <category name="Text" colour="#5CA68D">
-          <block type="text_charAt">
-            <mutation at="true"></mutation>
-            <field name="WHERE">FROM_START</field>
-            <value name="VALUE">
-              <block type="variables_get">
-                <field name="VAR" id="pSjLX5#x2?!xImFVf3Kd" variabletype="">text</field>
-              </block>
-            </value>
-          </block>
-          <block type="text">
-            <field name="TEXT"></field>
-          </block>
-          <block type="text_append">
-            <field name="VAR" id="8qVB@[iVNl_:Zfj/v-8c" variabletype="">item</field>
-            <value name="TEXT">
-              <shadow type="text">
-                <field name="TEXT"></field>
-              </shadow>
-            </value>
-          </block>
-          <block type="text_length">
-            <value name="VALUE">
-              <shadow type="text">
-                <field name="TEXT">abc</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="text_isEmpty">
-            <value name="VALUE">
-              <shadow type="text">
-                <field name="TEXT"></field>
-              </shadow>
-            </value>
-          </block>
-          <block type="text_indexOf">
-            <field name="END">FIRST</field>
-            <value name="VALUE">
-              <block type="variables_get">
-                <field name="VAR" id="pSjLX5#x2?!xImFVf3Kd" variabletype="">text</field>
-              </block>
-            </value>
-            <value name="FIND">
-              <shadow type="text">
-                <field name="TEXT">abc</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="text_join">
-            <mutation items="2"></mutation>
-          </block>
-          <block type="text_getSubstring">
-            <mutation at1="true" at2="true"></mutation>
-            <field name="WHERE1">FROM_START</field>
-            <field name="WHERE2">FROM_START</field>
-            <value name="STRING">
-              <block type="variables_get">
-                <field name="VAR" id="pSjLX5#x2?!xImFVf3Kd" variabletype="">text</field>
-              </block>
-            </value>
-          </block>
-          <block type="text_changeCase">
-            <field name="CASE">UPPERCASE</field>
-            <value name="TEXT">
-              <shadow type="text">
-                <field name="TEXT">abc</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="text_trim">
-            <field name="MODE">BOTH</field>
-            <value name="TEXT">
-              <shadow type="text">
-                <field name="TEXT">abc</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="text_print">
-            <value name="TEXT">
-              <shadow type="text">
-                <field name="TEXT">abc</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="text_prompt_ext">
-            <mutation type="TEXT"></mutation>
-            <field name="TYPE">TEXT</field>
-            <value name="TEXT">
-              <shadow type="text">
-                <field name="TEXT">abc</field>
-              </shadow>
-            </value>
-          </block>
-        </category>
-        <category name="Lists" colour="#745CA6">
-          <block type="lists_indexOf">
-            <field name="END">FIRST</field>
-            <value name="VALUE">
-              <block type="variables_get">
-                <field name="VAR" id="OVDH]DoCwtoDWMf:TY.I" variabletype="">list</field>
-              </block>
-            </value>
-          </block>
-          <block type="lists_create_with">
-            <mutation items="0"></mutation>
-          </block>
-          <block type="lists_repeat">
-            <value name="NUM">
-              <shadow type="math_number">
-                <field name="NUM">5</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="lists_length"></block>
-          <block type="lists_isEmpty"></block>
-          <block type="lists_create_with">
-            <mutation items="3"></mutation>
-          </block>
-          <block type="lists_getIndex">
-            <mutation statement="false" at="true"></mutation>
-            <field name="MODE">GET</field>
-            <field name="WHERE">FROM_START</field>
-            <value name="VALUE">
-              <block type="variables_get">
-                <field name="VAR" id="OVDH]DoCwtoDWMf:TY.I" variabletype="">list</field>
-              </block>
-            </value>
-          </block>
-          <block type="lists_setIndex">
-            <mutation at="true"></mutation>
-            <field name="MODE">SET</field>
-            <field name="WHERE">FROM_START</field>
-            <value name="LIST">
-              <block type="variables_get">
-                <field name="VAR" id="OVDH]DoCwtoDWMf:TY.I" variabletype="">list</field>
-              </block>
-            </value>
-          </block>
-          <block type="lists_getSublist">
-            <mutation at1="true" at2="true"></mutation>
-            <field name="WHERE1">FROM_START</field>
-            <field name="WHERE2">FROM_START</field>
-            <value name="LIST">
-              <block type="variables_get">
-                <field name="VAR" id="OVDH]DoCwtoDWMf:TY.I" variabletype="">list</field>
-              </block>
-            </value>
-          </block>
-          <block type="lists_split">
-            <mutation mode="SPLIT"></mutation>
-            <field name="MODE">SPLIT</field>
-            <value name="DELIM">
-              <shadow type="text">
-                <field name="TEXT">,</field>
-              </shadow>
-            </value>
-          </block>
-          <block type="lists_sort">
-            <field name="TYPE">NUMERIC</field>
-            <field name="DIRECTION">1</field>
-          </block>
-        </category>
-        <category name="Dictionnary" colour="#675ba5">
-            <block type="dicts_create_with">
-                <mutation items="0"></mutation>
-            </block>
-            <block type="dicts_create_with">
-                <mutation items="3"></mutation>
-            </block>
-            <block type="dicts_set_item">
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">key</field>
-                    </shadow>
-                </value>
-                <value name="DICT">
-                    <block type="variables_get">
-                        <field name="VAR" id="KCbO$YxOr;3/NbnBJQ=}" variabletype="">dict</field>
-                    </block>
-                </value>
-            </block>
-            <block type="dicts_get_item">
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">key</field>
-                    </shadow>
-                </value>
-                <value name="DICT">
-                    <block type="variables_get">
-                        <field name="VAR" id="KCbO$YxOr;3/NbnBJQ=}" variabletype="">dict</field>
-                    </block>
-                </value>
-            </block>
-            <block type="dicts_has_key">
-                <value name="KEY">
-                    <shadow type="text">
-                        <field name="TEXT">key</field>
-                    </shadow>
-                </value>
-                <value name="DICT">
-                    <block type="variables_get">
-                        <field name="VAR" id="KCbO$YxOr;3/NbnBJQ=}" variabletype="">dict</field>
-                    </block>
-                </value>
-            </block>
-            <block type="dicts_to_list">
-                <value name="DICT">
-                    <block type="variables_get">
-                        <field name="VAR" id="KCbO$YxOr;3/NbnBJQ=}" variabletype="">dict</field>
-                    </block>
-                </value>
-            </block>
-        </category>
-        <sep></sep>
-        <category name="Variables" colour="#A65C81" custom="VARIABLE"></category>
-        <category name="Functions" colour="#9A5CA6" custom="PROCEDURE"></category>
-        <sep></sep>
-        <category name="DOM" colour="#a5805b">
-          <block type="create_element"></block>
-          <block type="body_element"></block>
-          <block type="get_element_by_id"></block>
-          <block type="dom_queryselector">
-              <value name="ELEMENT">
-                  <shadow type="body_element"></shadow>
-              </value>
-          </block>
-          <block type="append_element"></block>
-          <block type="remove_child_element"></block>
-          <block type="remove_element"></block>
-          <block type="set_css_colour"></block>
-          <block type="set_content"></block>
-          <block type="input_value"></block>
-          <block type="console_log"></block>
-          <block type="set_html_attribute"></block>
-          <block type="get_html_attribute"></block>
-          <block type="get_json">
-            <value name="URL">
-                <shadow type="text">
-                    <field name="TEXT">http://</field>
-                </shadow>
-            </value>
-          </block>
-        </category>
-        <category name="DOM - Events" colour="#a5805b">
-            <block type="handle_event"></block>
-            <block type="handle_mouse_move"></block>
-            <block type="handle_key_press"></block>
-        </category>
-        <sep></sep>
-        <category name="Colour" colour="#A6745C">
-            <block type="colour_picker">
-                <field name="COLOUR">#ff0000</field>
-            </block>
-            <block type="colour_random"></block>
-            <block type="colour_rgb">
-                <value name="RED">
-                <shadow type="math_number">
-                    <field name="NUM">100</field>
-                </shadow>
-                </value>
-                <value name="GREEN">
-                <shadow type="math_number">
-                    <field name="NUM">50</field>
-                </shadow>
-                </value>
-                <value name="BLUE">
-                <shadow type="math_number">
-                    <field name="NUM">0</field>
-                </shadow>
-                </value>
-            </block>
-            <block type="colour_blend">
-                <value name="COLOUR1">
-                <shadow type="colour_picker">
-                    <field name="COLOUR">#ff0000</field>
-                </shadow>
-                </value>
-                <value name="COLOUR2">
-                <shadow type="colour_picker">
-                    <field name="COLOUR">#3333ff</field>
-                </shadow>
-                </value>
-                <value name="RATIO">
-                <shadow type="math_number">
-                    <field name="NUM">0.5</field>
-                </shadow>
-                </value>
-            </block>
+    <div id="blockly">
+        <ul class="toolbar list-unstyled list-inline">
+            <li><a href="./" class="btn btn-default" target="_blank" title="Learn more about this editor"><i class="fa fa-question-circle"></i></a></li>
+            <li><button id="view-source" class="btn btn-default" title="View the JS translation">JS</button></li>
+            <li><button id="play" class="btn" title="Play (Ctrl+space)"><i class="fa fa-play"></i></button></li>
+        </ul>
+        <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
+            <category name="Logic" colour="#5C81A6">
+                <block type="controls_if"></block>
+                <block type="logic_compare">
+                    <field name="OP">EQ</field>
+                </block>
+                <block type="logic_operation">
+                    <field name="OP">AND</field>
+                </block>
+                <block type="logic_negate"></block>
+                <block type="logic_boolean">
+                    <field name="BOOL">TRUE</field>
+                </block>
+                <block type="logic_null"></block>
+                <block type="logic_ternary"></block>
             </category>
-    </xml>
-  </div>
-  <div class="modal fade" id="source">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-          <h4 class="modal-title">JS Source Code</h4>
-        </div>
-        <div class="modal-body">
-          <p>Here is the JS source code for your program.</p>
-          <div id="source-code-holder"></div>
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" id="include-blockly-source"> Allow others to remix my Blockly code.
-            </label>
-          </div>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
+            <category name="Loops" colour="#5CA65C">
+                <block type="controls_repeat_ext">
+                    <value name="TIMES">
+                        <shadow type="math_number">
+                            <field name="NUM">10</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="controls_whileUntil">
+                    <field name="MODE">WHILE</field>
+                </block>
+                <block type="controls_for">
+                    <field name="VAR" id="#)Cw^?d210q$}Y,vZR33" variabletype="">i</field>
+                    <value name="FROM">
+                        <shadow type="math_number">
+                            <field name="NUM">1</field>
+                        </shadow>
+                    </value>
+                    <value name="TO">
+                        <shadow type="math_number">
+                            <field name="NUM">10</field>
+                        </shadow>
+                    </value>
+                    <value name="BY">
+                        <shadow type="math_number">
+                            <field name="NUM">1</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="controls_forEach">
+                    <field name="VAR" id="md{6wSRW:EXzwsDkMs#T" variabletype="">j</field>
+                </block>
+                <block type="dicts_controls_foreach">
 
-  <script src="../vendor/blockly/blockly_compressed.js"></script>
-  <script src="../vendor/blockly/blocks_compressed.js"></script>
-  <script src="../vendor/blockly/javascript_compressed.js"></script>
-  <script src="../vendor/blockly/en.js"></script>
-  <script src="../vendor/jquery.js"></script>
-  <script src="../vendor/mdn-b64.js"></script>
-  <script src="../vendor/codemirror/codemirror.js"></script>
-  <script src="../vendor/codemirror/javascript.js"></script>
-  <script src="vendor/pako.min.js"></script>
-  <script src="vendor/b64gzip.js"></script>
-  <script src="../dom-blocks.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.js"></script>
-  <script src="storage.js"></script>
-  <script src="editor.js"></script>
+                </block>
+                <block type="controls_flow_statements">
+                    <field name="FLOW">BREAK</field>
+                </block>
+            </category>
+            <category name="Math" colour="#5C68A6">
+                <block type="math_round">
+                    <field name="OP">ROUND</field>
+                    <value name="NUM">
+                        <shadow type="math_number">
+                            <field name="NUM">3.1</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="math_number">
+                    <field name="NUM">0</field>
+                </block>
+                <block type="math_to_number">
+                    <value name="VALUE">
+                        <shadow type="text">
+                            <field name="TEXT">3.1</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="math_single">
+                    <field name="OP">ROOT</field>
+                    <value name="NUM">
+                        <shadow type="math_number">
+                            <field name="NUM">9</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="math_trig">
+                    <field name="OP">SIN</field>
+                    <value name="NUM">
+                        <shadow type="math_number">
+                            <field name="NUM">45</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="math_constant">
+                    <field name="CONSTANT">PI</field>
+                </block>
+                <block type="math_number_property">
+                    <mutation divisor_input="false"></mutation>
+                    <field name="PROPERTY">EVEN</field>
+                    <value name="NUMBER_TO_CHECK">
+                        <shadow type="math_number">
+                            <field name="NUM">0</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="math_arithmetic">
+                    <field name="OP">ADD</field>
+                    <value name="A">
+                        <shadow type="math_number">
+                            <field name="NUM">1</field>
+                        </shadow>
+                    </value>
+                    <value name="B">
+                        <shadow type="math_number">
+                            <field name="NUM">1</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="math_on_list">
+                    <mutation op="SUM"></mutation>
+                    <field name="OP">SUM</field>
+                </block>
+                <block type="math_modulo">
+                    <value name="DIVIDEND">
+                        <shadow type="math_number">
+                            <field name="NUM">64</field>
+                        </shadow>
+                    </value>
+                    <value name="DIVISOR">
+                        <shadow type="math_number">
+                            <field name="NUM">10</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="math_constrain">
+                    <value name="VALUE">
+                        <shadow type="math_number">
+                            <field name="NUM">50</field>
+                        </shadow>
+                    </value>
+                    <value name="LOW">
+                        <shadow type="math_number">
+                            <field name="NUM">1</field>
+                        </shadow>
+                    </value>
+                    <value name="HIGH">
+                        <shadow type="math_number">
+                            <field name="NUM">100</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="math_random_int">
+                    <value name="FROM">
+                        <shadow type="math_number">
+                            <field name="NUM">1</field>
+                        </shadow>
+                    </value>
+                    <value name="TO">
+                        <shadow type="math_number">
+                            <field name="NUM">100</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="math_random_float"></block>
+            </category>
+            <category name="Text" colour="#5CA68D">
+                <block type="text_charAt">
+                    <mutation at="true"></mutation>
+                    <field name="WHERE">FROM_START</field>
+                    <value name="VALUE">
+                        <block type="variables_get">
+                            <field name="VAR" id="pSjLX5#x2?!xImFVf3Kd" variabletype="">text</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="text">
+                    <field name="TEXT"></field>
+                </block>
+                <block type="text_append">
+                    <field name="VAR" id="8qVB@[iVNl_:Zfj/v-8c" variabletype="">item</field>
+                    <value name="TEXT">
+                        <shadow type="text">
+                            <field name="TEXT"></field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="text_length">
+                    <value name="VALUE">
+                        <shadow type="text">
+                            <field name="TEXT">abc</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="text_isEmpty">
+                    <value name="VALUE">
+                        <shadow type="text">
+                            <field name="TEXT"></field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="text_indexOf">
+                    <field name="END">FIRST</field>
+                    <value name="VALUE">
+                        <block type="variables_get">
+                            <field name="VAR" id="pSjLX5#x2?!xImFVf3Kd" variabletype="">text</field>
+                        </block>
+                    </value>
+                    <value name="FIND">
+                        <shadow type="text">
+                            <field name="TEXT">abc</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="text_join">
+                    <mutation items="2"></mutation>
+                </block>
+                <block type="text_getSubstring">
+                    <mutation at1="true" at2="true"></mutation>
+                    <field name="WHERE1">FROM_START</field>
+                    <field name="WHERE2">FROM_START</field>
+                    <value name="STRING">
+                        <block type="variables_get">
+                            <field name="VAR" id="pSjLX5#x2?!xImFVf3Kd" variabletype="">text</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="text_changeCase">
+                    <field name="CASE">UPPERCASE</field>
+                    <value name="TEXT">
+                        <shadow type="text">
+                            <field name="TEXT">abc</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="text_trim">
+                    <field name="MODE">BOTH</field>
+                    <value name="TEXT">
+                        <shadow type="text">
+                            <field name="TEXT">abc</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="text_print">
+                    <value name="TEXT">
+                        <shadow type="text">
+                            <field name="TEXT">abc</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="text_prompt_ext">
+                    <mutation type="TEXT"></mutation>
+                    <field name="TYPE">TEXT</field>
+                    <value name="TEXT">
+                        <shadow type="text">
+                            <field name="TEXT">abc</field>
+                        </shadow>
+                    </value>
+                </block>
+            </category>
+            <category name="Lists" colour="#745CA6">
+                <block type="lists_indexOf">
+                    <field name="END">FIRST</field>
+                    <value name="VALUE">
+                        <block type="variables_get">
+                            <field name="VAR" id="OVDH]DoCwtoDWMf:TY.I" variabletype="">list</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="lists_create_with">
+                    <mutation items="0"></mutation>
+                </block>
+                <block type="lists_repeat">
+                    <value name="NUM">
+                        <shadow type="math_number">
+                            <field name="NUM">5</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="lists_length"></block>
+                <block type="lists_isEmpty"></block>
+                <block type="lists_create_with">
+                    <mutation items="3"></mutation>
+                </block>
+                <block type="lists_getIndex">
+                    <mutation statement="false" at="true"></mutation>
+                    <field name="MODE">GET</field>
+                    <field name="WHERE">FROM_START</field>
+                    <value name="VALUE">
+                        <block type="variables_get">
+                            <field name="VAR" id="OVDH]DoCwtoDWMf:TY.I" variabletype="">list</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="lists_setIndex">
+                    <mutation at="true"></mutation>
+                    <field name="MODE">SET</field>
+                    <field name="WHERE">FROM_START</field>
+                    <value name="LIST">
+                        <block type="variables_get">
+                            <field name="VAR" id="OVDH]DoCwtoDWMf:TY.I" variabletype="">list</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="lists_getSublist">
+                    <mutation at1="true" at2="true"></mutation>
+                    <field name="WHERE1">FROM_START</field>
+                    <field name="WHERE2">FROM_START</field>
+                    <value name="LIST">
+                        <block type="variables_get">
+                            <field name="VAR" id="OVDH]DoCwtoDWMf:TY.I" variabletype="">list</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="lists_split">
+                    <mutation mode="SPLIT"></mutation>
+                    <field name="MODE">SPLIT</field>
+                    <value name="DELIM">
+                        <shadow type="text">
+                            <field name="TEXT">,</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="lists_sort">
+                    <field name="TYPE">NUMERIC</field>
+                    <field name="DIRECTION">1</field>
+                </block>
+            </category>
+            <category name="Dictionnary" colour="#675ba5">
+                <block type="dicts_create_with">
+                    <mutation items="0"></mutation>
+                </block>
+                <block type="dicts_create_with">
+                    <mutation items="3"></mutation>
+                </block>
+                <block type="dicts_set_item">
+                    <value name="KEY">
+                        <shadow type="text">
+                            <field name="TEXT">key</field>
+                        </shadow>
+                    </value>
+                    <value name="DICT">
+                        <block type="variables_get">
+                            <field name="VAR" id="KCbO$YxOr;3/NbnBJQ=}" variabletype="">dict</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="dicts_get_item">
+                    <value name="KEY">
+                        <shadow type="text">
+                            <field name="TEXT">key</field>
+                        </shadow>
+                    </value>
+                    <value name="DICT">
+                        <block type="variables_get">
+                            <field name="VAR" id="KCbO$YxOr;3/NbnBJQ=}" variabletype="">dict</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="dicts_has_key">
+                    <value name="KEY">
+                        <shadow type="text">
+                            <field name="TEXT">key</field>
+                        </shadow>
+                    </value>
+                    <value name="DICT">
+                        <block type="variables_get">
+                            <field name="VAR" id="KCbO$YxOr;3/NbnBJQ=}" variabletype="">dict</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="dicts_to_list">
+                    <value name="DICT">
+                        <block type="variables_get">
+                            <field name="VAR" id="KCbO$YxOr;3/NbnBJQ=}" variabletype="">dict</field>
+                        </block>
+                    </value>
+                </block>
+            </category>
+            <sep></sep>
+            <category name="Variables" colour="#A65C81" custom="VARIABLE"></category>
+            <category name="Functions" colour="#9A5CA6" custom="PROCEDURE"></category>
+            <sep></sep>
+            <category name="DOM" colour="#a5805b">
+                <block type="console_log"></block>
+                <block type="create_element"></block>
+                <block type="body_element"></block>
+                <block type="get_element_by_id"></block>
+                <block type="dom_queryselector">
+                    <value name="ELEMENT">
+                        <shadow type="body_element"></shadow>
+                    </value>
+                </block>
+                <block type="append_element"></block>
+                <block type="remove_child_element"></block>
+                <block type="remove_element"></block>
+                <block type="set_css_colour"></block>
+                <block type="set_content"></block>
+                <block type="input_value"></block>
+                <block type="dom_toggle_class">
+                    <value name="CLASS">
+                        <shadow type="text">
+                            <field name="TEXT">active</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="set_html_attribute"></block>
+                <block type="get_html_attribute"></block>
+                <block type="get_json">
+                    <value name="URL">
+                        <shadow type="text">
+                            <field name="TEXT">http://</field>
+                        </shadow>
+                    </value>
+                </block>
+            </category>
+            <category name="DOM - Events" colour="#a5805b">
+                <block type="handle_event"></block>
+                <block type="handle_mouse_move"></block>
+                <block type="handle_key_press"></block>
+            </category>
+            <sep></sep>
+            <category name="Colour" colour="#A6745C">
+                <block type="colour_picker">
+                    <field name="COLOUR">#ff0000</field>
+                </block>
+                <block type="colour_random"></block>
+                <block type="colour_rgb">
+                    <value name="RED">
+                        <shadow type="math_number">
+                            <field name="NUM">100</field>
+                        </shadow>
+                    </value>
+                    <value name="GREEN">
+                        <shadow type="math_number">
+                            <field name="NUM">50</field>
+                        </shadow>
+                    </value>
+                    <value name="BLUE">
+                        <shadow type="math_number">
+                            <field name="NUM">0</field>
+                        </shadow>
+                    </value>
+                </block>
+                <block type="colour_blend">
+                    <value name="COLOUR1">
+                        <shadow type="colour_picker">
+                            <field name="COLOUR">#ff0000</field>
+                        </shadow>
+                    </value>
+                    <value name="COLOUR2">
+                        <shadow type="colour_picker">
+                            <field name="COLOUR">#3333ff</field>
+                        </shadow>
+                    </value>
+                    <value name="RATIO">
+                        <shadow type="math_number">
+                            <field name="NUM">0.5</field>
+                        </shadow>
+                    </value>
+                </block>
+            </category>
+        </xml>
+    </div>
+    <div class="modal fade" id="source">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title">JS Source Code</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Here is the JS source code for your program.</p>
+                    <div id="source-code-holder"></div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="include-blockly-source"> Allow others to remix my Blockly code.
+                        </label>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <script src="../vendor/blockly/blockly_compressed.js"></script>
+    <script src="../vendor/blockly/blocks_compressed.js"></script>
+    <script src="../vendor/blockly/javascript_compressed.js"></script>
+    <script src="../vendor/blockly/en.js"></script>
+    <script src="../vendor/jquery.js"></script>
+    <script src="../vendor/mdn-b64.js"></script>
+    <script src="../vendor/codemirror/codemirror.js"></script>
+    <script src="../vendor/codemirror/javascript.js"></script>
+    <script src="vendor/pako.min.js"></script>
+    <script src="vendor/b64gzip.js"></script>
+    <script src="../dom-blocks.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.js"></script>
+    <script src="storage.js"></script>
+    <script src="editor.js"></script>
 </body>

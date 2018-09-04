@@ -442,7 +442,7 @@ Blockly.Blocks['dom_queryselector'] = {
         .appendField("starting on");
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
-    this.setColour(30);
+    this.setColour(Blockly.Msg['DOM_HUE']);
  this.setTooltip("");
  this.setHelpUrl("");
   }
@@ -454,6 +454,30 @@ Blockly.JavaScript['dom_queryselector'] = function(block) {
   var element = Blockly.JavaScript.valueToCode(block, 'ELEMENT', Blockly.JavaScript.ORDER_ATOMIC);
   var code = element + '.' + type + "('" + css + "')";
   return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.Blocks['dom_toggle_class'] = {
+  init: function() {
+    this.appendValueInput("CLASS")
+        .setCheck(null)
+        .appendField("toggle class");
+    this.appendValueInput("ELEMENT")
+        .setCheck("Element")
+        .appendField("on element");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(Blockly.Msg['DOM_HUE']);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.JavaScript['dom_toggle_class'] = function(block) {
+  var value_class = Blockly.JavaScript.valueToCode(block, 'CLASS', Blockly.JavaScript.ORDER_ATOMIC);
+  var element = Blockly.JavaScript.valueToCode(block, 'ELEMENT', Blockly.JavaScript.ORDER_ATOMIC);
+  var code = element + '.classList.toggle(' + value_class + ');\n';
+  return code;
 };
 
 Blockly.Blocks['get_json'] = {
