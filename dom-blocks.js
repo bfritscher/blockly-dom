@@ -239,6 +239,8 @@ Blockly.Blocks['handle_event'] = {
         .setCheck(null)
         .appendField('do');
     this.setColour(Blockly.Msg['DOM_HUE']);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
   }
 };
 
@@ -276,8 +278,10 @@ Blockly.Blocks['handle_mouse_move'] = {
         .setCheck(null)
         .appendField('do');
     this.setColour(Blockly.Msg['DOM_HUE']);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
@@ -318,8 +322,10 @@ Blockly.Blocks['handle_key_press'] = {
         .setCheck(null)
         .appendField('do');
     this.setColour(Blockly.Msg['DOM_HUE']);
- this.setTooltip("");
- this.setHelpUrl("");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip("");
+    this.setHelpUrl("");
   }
 };
 
