@@ -431,6 +431,31 @@ Blockly.JavaScript['get_html_attribute'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
+Blockly.Blocks['dom_queryselector'] = {
+  init: function() {
+    this.appendValueInput("ELEMENT")
+        .setCheck("Element")
+        .appendField("get")
+        .appendField(new Blockly.FieldDropdown([["list","querySelectorAll"], ["first element","querySelector"]]), "TYPE")
+        .appendField("from")
+        .appendField(new Blockly.FieldTextInput("CSS selector"), "CSS")
+        .appendField("starting on");
+    this.setInputsInline(true);
+    this.setOutput(true, "Boolean");
+    this.setColour(30);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.JavaScript['dom_queryselector'] = function(block) {
+  var type = block.getFieldValue('TYPE');
+  var css = block.getFieldValue('CSS');
+  var element = Blockly.JavaScript.valueToCode(block, 'ELEMENT', Blockly.JavaScript.ORDER_ATOMIC);
+  var code = element + '.' + type + "('" + css + "')";
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
 Blockly.Blocks['get_json'] = {
   init: function() {
     this.appendValueInput('URL')
