@@ -744,6 +744,27 @@ Blockly.JavaScript['dicts_has_key'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
+Blockly.Blocks['dicts_to_list'] = {
+  init: function() {
+    this.appendValueInput("DICT")
+        .setCheck(null)
+        .appendField("make list of ")
+        .appendField(new Blockly.FieldDropdown([["keys","keys"], ["values","values"]]), "TYPE")
+        .appendField("from");
+    this.setInputsInline(true);
+    this.setOutput(true, "Boolean");
+    this.setColour(Blockly.Msg['DICTS_HUE']);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.JavaScript['dicts_to_list'] = function(block) {
+  var type = block.getFieldValue('TYPE');
+  var dict = Blockly.JavaScript.valueToCode(block, 'DICT', Blockly.JavaScript.ORDER_ATOMIC);
+  var code = 'Object.' + type + '(' + dict + ')';
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
 
 Blockly.Blocks['math_to_number'] = {
   init: function() {
