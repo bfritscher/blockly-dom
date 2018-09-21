@@ -234,7 +234,7 @@ Blockly.Blocks['handle_event'] = {
         .setCheck("Element")
         .appendField("when element");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["is clicked","click"], ["is loaded","load"], ["has changed","change"], ["mouse enter","mouseenter"], ["mouse leave","mouseleave"], ["form is submitted","submit"]]), "TYPE");
+        .appendField(new Blockly.FieldDropdown([["is clicked","click"], ["is loaded","load"], ["has changed","change"], ["is focused", "focus"], ["is blured", "blur"], ["mouse enter","mouseenter"], ["mouse leave","mouseleave"], ["form is submitted","submit"]]), "TYPE");
     this.appendStatementInput("STACK")
         .setCheck(null)
         .appendField('do');
