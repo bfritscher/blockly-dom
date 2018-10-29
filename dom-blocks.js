@@ -364,6 +364,33 @@ Blockly.JavaScript['input_value'] = function(block) {
   ];
 };
 
+Blockly.Blocks['set_input_value'] = {
+  init: function() {
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this
+      .appendValueInput('ELEMENT').setCheck('Element')
+      .appendField('set the value of element');
+    this
+      .appendValueInput('VALUE')
+      .setAlign(Blockly.ALIGN_RIGHT)
+      .appendField('to');
+    this.setColour(Blockly.Msg['DOM_HUE']);
+  }
+};
+
+Blockly.JavaScript['set_input_value'] = function(block) {
+  var element = Blockly.JavaScript.valueToCode(
+    block, 'ELEMENT',
+    Blockly.JavaScript.ORDER_ATOMIC
+  );
+  var value = Blockly.JavaScript.valueToCode(
+    block, 'VALUE',
+    Blockly.JavaScript.ORDER_ATOMIC
+  );
+  return element + '.value = ' + value + ';\n';
+};
+
 Blockly.Blocks['console_log'] = {
   init: function() {
     this.appendValueInput("NAME")
