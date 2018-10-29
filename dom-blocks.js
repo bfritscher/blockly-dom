@@ -441,7 +441,7 @@ Blockly.Blocks['dom_queryselector'] = {
         .appendField(new Blockly.FieldTextInput("CSS selector"), "CSS")
         .appendField("starting on");
     this.setInputsInline(true);
-    this.setOutput(true, "Boolean");
+    this.setOutput(true, null);
     this.setColour(Blockly.Msg['DOM_HUE']);
  this.setTooltip("");
  this.setHelpUrl("");
@@ -453,6 +453,9 @@ Blockly.JavaScript['dom_queryselector'] = function(block) {
   var css = block.getFieldValue('CSS');
   var element = Blockly.JavaScript.valueToCode(block, 'ELEMENT', Blockly.JavaScript.ORDER_ATOMIC);
   var code = element + '.' + type + "('" + css + "')";
+  if (type === "querySelectorAll") {
+    code = `[...${code}]`;
+  }
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
