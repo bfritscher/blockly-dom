@@ -259,10 +259,8 @@ Blockly.JavaScript['handle_event'] = function(block) {
     branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
         '\'' + block.id + '\'') + branch;
   }
-  return [
-    target + '.addEventListener("' + block.getFieldValue('TYPE') + '", function() {\n' +
-    branch + '});\n'
-  ];
+  return target + '.addEventListener("' + block.getFieldValue('TYPE') + '", function() {\n' +
+    branch + '});\n';
 };
 
 Blockly.Blocks['handle_mouse_move'] = {
@@ -302,12 +300,10 @@ Blockly.JavaScript['handle_mouse_move'] = function(block) {
     branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
         '\'' + block.id + '\'') + branch;
   }
-  return [
-    target + '.addEventListener("mousemove", function(e) {\n  ' +
+  return target + '.addEventListener("mousemove", function(e) {\n  ' +
     variable_x + ' = e.clientX;\n  ' +
     variable_y + ' = e.clientY;\n' +
-    branch + '});\n'
-  ];
+    branch + '});\n';
 };
 
 Blockly.Blocks['handle_key_press'] = {
@@ -345,11 +341,9 @@ Blockly.JavaScript['handle_key_press'] = function(block) {
     branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
         '\'' + block.id + '\'') + branch;
   }
-  return [
-    target + '.addEventListener("keypress", function(e) {\n  ' +
+  return target + '.addEventListener("keypress", function(e) {\n  ' +
     variable_key + ' = e.key;\n' +
-    branch + '});\n'
-  ];
+    branch + '});\n';
 };
 
 Blockly.Blocks['input_value'] = {
