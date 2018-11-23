@@ -234,7 +234,9 @@ Blockly.Blocks['handle_event'] = {
         .setCheck("Element")
         .appendField("when element");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["is clicked","click"], ["is loaded","load"], ["has changed","change"], ["is focused", "focus"], ["is blured", "blur"], ["mouse enter","mouseenter"], ["mouse leave","mouseleave"], ["form is submitted","submit"]]), "TYPE");
+        .appendField(new Blockly.FieldDropdown([["is clicked","click"], ["is loaded","load"], ["has changed","change"], ["is focused", "focus"], ["is blured", "blur"], ["mouse enter","mouseenter"], ["mouse leave","mouseleave"], ["form is submitted","submit"]]), "TYPE")
+        .appendField("with")
+        .appendField(new Blockly.FieldVariable("element"), "element");
     this.appendStatementInput("STACK")
         .setCheck(null)
         .appendField('do');
@@ -249,6 +251,7 @@ Blockly.JavaScript['handle_event'] = function(block) {
     block, 'TARGET',
     Blockly.JavaScript.ORDER_ATOMIC
   );
+  var variable_element = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('element'), Blockly.Variables.NAME_TYPE);
   var branch = Blockly.JavaScript.statementToCode(block, 'STACK');
   if (Blockly.JavaScript.STATEMENT_PREFIX) {
     branch = Blockly.JavaScript.prefixLines(
@@ -260,7 +263,7 @@ Blockly.JavaScript['handle_event'] = function(block) {
         '\'' + block.id + '\'') + branch;
   }
   return target + '.addEventListener("' + block.getFieldValue('TYPE') + '", function() {\n' +
-    target + ' = this;\n' +
+    variable_element + ' = this;\n' +
     branch + '});\n';
 };
 
