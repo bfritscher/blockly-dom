@@ -540,6 +540,28 @@ Blockly.JavaScript['get_json'] = function(block) {
   return code;
 };
 
+Blockly.Blocks['set_timeout'] = {
+  init: function() {
+    this.appendValueInput("TIME")
+        .setCheck("Number")
+        .appendField("wait for");
+    this.appendStatementInput("CALLBACK")
+        .setCheck(null)
+        .appendField("then do");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setColour(Blockly.Msg['DOM_HUE']);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.JavaScript['set_timeout'] = function(block) {
+  var time = Blockly.JavaScript.valueToCode(block, 'TIME', Blockly.JavaScript.ORDER_ATOMIC);
+  var callback = Blockly.JavaScript.statementToCode(block, 'CALLBACK');
+  var code = 'setTimeout(() => {\n' + callback + '}, ' + time + ');\n';
+  return code;
+};
 
 Blockly.Msg["DICTS_HUE"] = "250";
 Blockly.Msg["DICTS_CREATE_WITH_HELPURL"] = "";
