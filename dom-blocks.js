@@ -260,6 +260,7 @@ Blockly.JavaScript['handle_event'] = function(block) {
         '\'' + block.id + '\'') + branch;
   }
   return target + '.addEventListener("' + block.getFieldValue('TYPE') + '", function() {\n' +
+    target + ' = this;\n' +
     branch + '});\n';
 };
 
