@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+    />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        overflow: hidden;
+        width: 200px;
+        font-size: 0;
+        font-family: sans-serif;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .content {
+        padding: 4px;
+        font-size: 12px;
+      }
+
+      .tray-icon {
+        float: right;
+        cursor: default;
+        padding: 0 4px;
+      }
+
+      #connected {
+        color: yellow;
+        display: none;
+      }
+
+      #error {
+        color: red;
+        display: none;
+      }
+
+      #modified {
+        color: lightgreen;
+        display: none;
+      }
+    </style>
+    <title>Blockly Bridge</title>
+  </head>
+  <body>
+    <div class="content">
+      <a id="editorLink" href="./editor.html"
+        ><i class="fas fa-puzzle-piece" style="padding-right: 0.5em;"></i>Open
+        Blockly Editor</a
+      >
+      <i
+        id="connected"
+        class="fas fa-bolt tray-icon"
+        title="Using code from the Blockly editor."
+      ></i>
+      <i
+        id="error"
+        class="fas fa-bug tray-icon"
+        title="Error executing code from the Blockly editor."
+      ></i>
+      <i
+        id="modified"
+        class="fas fa-exclamation-circle tray-icon"
+        title="Code in the Blockly editor has been modified. Click to reload this page to see your changes."
+      ></i>
+    </div>
+    <script>
+      (function() {
+        let editor;
+        let location;
+        const connectedDom = document.getElementById("connected");
+        const errorDom = document.getElementById("error");
+        const modifiedDom = document.getElementById("modified");
+
+        modifiedDom.onclick = function() {
+          window.parent.postMessage({type: 'reload'}, '*');
+        }
+
+        const worker = new SharedWorker("sharedStateWorker.js");
+        worker.port.onmessage = function(e) {
+          if(e.data.type === 'codeUpdate') {
+            modifiedDom.style.display = 'inherit';
+            if(e.data.reload) {
+              window.parent.postMessage({type: 'reload'}, '*');
+            }
+          } else {
+            // forward message
+            window.parent.postMessage(e.data, '*');
+          }
+        };
+
+        window.addEventListener(
+          "message",
+          event => {
+            if (event.source !== window.parent) return;
+
+            const msg = event.data;
+
+            if (msg.type === "initResponse") {
+              location = msg.location;
+              //check if data for this pagein worker
+              worker.port.postMessage({
+                type: "bridgeReady",
+                location: msg.location,
+                blocklySource: msg.blocklySource
+              });
+              // load JS script from remote?
+              // TODO if editor open use editor?
+            } else if (msg.type === "scriptInjected") {
+              connectedDom.style.display = "inherit";
+            } else if (msg.type === "scriptError") {
+              errorDom.style.display = "inherit";
+            }
+          },
+          false
+        );
+
+        function makeStyle() {
+          const content = document.querySelector(".content");
+          return `width:${content.offsetWidth}px;height:${
+            content.offsetHeight
+          }px;position:absolute;bottom:0;left:0;border:none;overflow:hidden;`;
+        }
+
+        window.parent.postMessage(
+          {
+            type: "init",
+            style: makeStyle()
+          },
+          "*"
+        );
+
+        const editorLink = document.getElementById("editorLink");
+
+        editorLink.onclick = e => {
+          e.preventDefault();
+          if (editor && !editor.isClosed) {
+            editor.focus();
+            return;
+          }
+          editor = window.open(
+            editorLink.href,
+            location,
+            "width=800,height=600,resizable=yes"
+          );
+        };
+      })();
+    </script>
+  </body>
+</html>
