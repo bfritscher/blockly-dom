@@ -124,6 +124,17 @@
               connectedDom.style.display = "inherit";
             } else if (msg.type === "scriptError") {
               errorDom.style.display = "inherit";
+              worker.port.postMessage({
+                type: "scriptError",
+                location: location,
+                msg: msg.msg
+              });
+            } else if (msg.type === "highlightBlock") {
+              worker.port.postMessage({
+                type: "highlightBlock",
+                location: location,
+                id: msg.id
+              });
             }
           },
           false

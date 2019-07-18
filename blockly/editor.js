@@ -1,5 +1,7 @@
 (function() {
   let workspace;
+  let lastBlockId;
+  const errorComments = [];
   // This can be used by developers from the debug console.
   window.getWorkspaceXml = function() {
     var xml = Blockly.Xml.workspaceToDom(workspace);
@@ -11,8 +13,13 @@
     return B64Gzip.compress(Blockly.Xml.domToText(dom));
   }
 
-  function getWorkspaceCode() {
-    return Blockly.JavaScript.workspaceToCode(workspace);
+  function getWorkspaceCode(withHighlight=false) {
+    if (withHighlight) {
+      Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
+    }
+    const js = Blockly.JavaScript.workspaceToCode(workspace);
+    Blockly.JavaScript.STATEMENT_PREFIX = '';
+    return js;
   }
 
   function getCurrentWorkspaceXml() {
@@ -28,8 +35,6 @@
       workspace.clear();
     }
   }
-
-  var editor = null;
 
   function generateViewSourceCode() {
     let js = getWorkspaceCode();
@@ -64,9 +69,17 @@
   }
 
   function sendCodeToWorker(reload = false) {
+    if (reload) {
+      workspace.highlightBlock();
+      lastBlockId = undefined;
+      let comment;
+      while(comment = errorComments.pop()) {
+        comment.dispose();
+      }
+    }
     sendMessage({
       type: "codeUpdate",
-      script: getWorkspaceCode(),
+      script: getWorkspaceCode(true),
       blocklySource: getWorkspaceCompressed(),
       reload
     });
@@ -86,10 +99,22 @@
           console.log(err);
         }
       }
+    } else if (e.data.type === "highlightBlock") {
+      lastBlockId = e.data.id;
+      workspace.highlightBlock(e.data.id);
+    } else if (e.data.type === "scriptError") {
+      if ( lastBlockId ) {
+        const block = workspace.getBlockById(lastBlockId);
+        block.setCommentText(e.data.msg);
+        block.comment.setVisible(true);
+        errorComments.push(block.comment);
+      }
+
     }
   };
 
   window.addEventListener("DOMContentLoaded", () => {
+    Blockly.JavaScript.addReservedWords('highlightBlock');
     workspace = Blockly.inject(document.getElementById("blockly"), {
       path: "vendors/blockly/",
       toolbox: document.getElementById("toolbox"),

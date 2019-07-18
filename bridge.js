@@ -32,6 +32,10 @@ Create iframe button and listen to events
         iframe.contentWindow.postMessage({type: "scriptError", msg: e.message}, "*");
       }, false);
 
+      window.highlightBlock = function highlightBlock(id) {
+        iframe.contentWindow.postMessage({type: "highlightBlock", id: id}, "*");
+      }
+
       window.addEventListener("message", (event) => {
         if (event.source !== iframe.contentWindow) return;
         const msg = event.data;
