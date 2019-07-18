@@ -58,7 +58,7 @@
   </head>
   <body>
     <div class="content">
-      <a id="editorLink" href="./editor.html"
+      <a id="editorLink" href="blockly/editor.html"
         ><i class="fas fa-puzzle-piece" style="padding-right: 0.5em;"></i>Open
         Blockly Editor</a
       >
@@ -90,7 +90,7 @@
           window.parent.postMessage({type: 'reload'}, '*');
         }
 
-        const worker = new SharedWorker("sharedStateWorker.js");
+        const worker = new SharedWorker("sharedStateWorker.js", "BlocklyEditorSharedStateWorker");
         worker.port.onmessage = function(e) {
           if(e.data.type === 'codeUpdate') {
             modifiedDom.style.display = 'inherit';

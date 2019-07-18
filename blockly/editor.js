@@ -22,16 +22,12 @@
 
   function setCurrentWorkspaceXml(xml) {
     try {
-      Blockly.Xml.domToWorkspace(
-        Blockly.Xml.textToDom(xml),
-        workspace
-      );
+      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
     } catch (e) {
       console.log(e);
       workspace.clear();
     }
   }
-
 
   var editor = null;
 
@@ -58,25 +54,28 @@
 
   function updateSourceCode() {
     const sourceCodeDom = document.getElementById("source-code-holder");
-      sourceCodeDom.innerHTML = generateViewSourceCode();
-      hljs.highlightBlock(sourceCodeDom);
+    sourceCodeDom.innerHTML = generateViewSourceCode();
+    hljs.highlightBlock(sourceCodeDom);
   }
 
   function sendMessage(msg) {
-    msg = Object.assign(msg, {location: window.name})
+    msg = Object.assign(msg, { location: window.name });
     worker.port.postMessage(msg);
   }
 
-  function sendCodeToWorker(reload=false) {
+  function sendCodeToWorker(reload = false) {
     sendMessage({
       type: "codeUpdate",
       script: getWorkspaceCode(),
       blocklySource: getWorkspaceCompressed(),
       reload
-   });
+    });
   }
 
-  const worker = new SharedWorker('sharedStateWorker.js');
+  const worker = new SharedWorker(
+    "../sharedStateWorker.js",
+    "BlocklyEditorSharedStateWorker"
+  );
   worker.port.onmessage = function(e) {
     if (e.data.type === "blocklySource") {
       if (e.data.blocklySource) {
@@ -88,29 +87,37 @@
         }
       }
     }
-  }
+  };
 
   window.addEventListener("DOMContentLoaded", () => {
     workspace = Blockly.inject(document.getElementById("blockly"), {
       path: "vendors/blockly/",
-      toolbox: document.getElementById("toolbox")
+      toolbox: document.getElementById("toolbox"),
+      oneBasedIndex: false,
+      zoom: {
+        controls: true,
+        wheel: true,
+        startScale: 1.0,
+        maxScale: 1.5,
+        minScale: 0.3,
+        scaleSpeed: 1.1
+      }
     });
-    sendMessage({type: 'editorReady'});
+    sendMessage({ type: "editorReady" });
 
     workspace.addChangeListener(() => {
       sendCodeToWorker(false);
     });
 
     document.getElementById("view-source").onclick = function() {
-      updateSourceCode()
+      updateSourceCode();
       $("#source").modal();
     };
 
-    $(document).on('click', 'code', function () {
+    $(document).on("click", "code", function() {
       if (this.select) {
         this.select();
-      }
-      else if (document.selection) {
+      } else if (document.selection) {
         var range = document.body.createTextRange();
         range.moveToElementText(this);
         range.select();
