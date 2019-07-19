@@ -12,16 +12,18 @@ function addPortToLookupByLocation(port, lookup, location) {
   lookup[location].push(port);
 }
 
-function sendMessage(ports, data) {
+function sendMessage(ports, data, notSelf) {
   if (ports) {
     for (const port of ports) {
-      port.postMessage(data);
+      if (port !== notSelf) {
+        port.postMessage(data);
+      }
     }
   }
 }
 
 onconnect = function(e) {
-  var port = e.ports[0];
+  const port = e.ports[0];
   port.onmessage = function(e) {
     if (e.data.type === "editorReady") {
       if (!e.data.location) return;
@@ -30,6 +32,8 @@ onconnect = function(e) {
         type: "blocklySource",
         blocklySource: xml[e.data.location]
       });
+      // close others only one per location
+      sendMessage(ports.editors[e.data.location], {type: "close"}, port);
     } else if (e.data.type === "bridgeReady") {
       if (!e.data.location) return;
       addPortToLookupByLocation(port, ports.bridges, e.data.location);

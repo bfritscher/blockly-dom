@@ -8,22 +8,8 @@
     return Blockly.Xml.domToPrettyText(xml);
   };
 
-  function getWorkspaceCompressed() {
-    var dom = Blockly.Xml.workspaceToDom(workspace);
-    return B64Gzip.compress(Blockly.Xml.domToText(dom));
-  }
-
-  function getWorkspaceCode(withHighlight=false) {
-    if (withHighlight) {
-      Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
-    }
-    const js = Blockly.JavaScript.workspaceToCode(workspace);
-    Blockly.JavaScript.STATEMENT_PREFIX = '';
-    return js;
-  }
-
   function getCurrentWorkspaceXml() {
-    var xml = Blockly.Xml.workspaceToDom(workspace);
+    const xml = Blockly.Xml.workspaceToDom(workspace);
     return Blockly.Xml.domToText(xml);
   }
 
@@ -34,6 +20,23 @@
       console.log(e);
       workspace.clear();
     }
+  }
+
+  function getWorkspaceCompressed() {
+    return B64Gzip.compress(getCurrentWorkspaceXml());
+  }
+
+  function setWorkspaceCompressed(blocklySource) {
+    setCurrentWorkspaceXml(B64Gzip.decompress(blocklySource));
+  }
+
+  function getWorkspaceCode(withHighlight=false) {
+    if (withHighlight) {
+      Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
+    }
+    const js = Blockly.JavaScript.workspaceToCode(workspace);
+    Blockly.JavaScript.STATEMENT_PREFIX = '';
+    return js;
   }
 
   function generateViewSourceCode() {
@@ -68,21 +71,28 @@
     worker.port.postMessage(msg);
   }
 
+  let lastSentBlocklySource;
+
   function sendCodeToWorker(reload = false) {
+    const blocklySource = getWorkspaceCompressed();
+    if (lastSentBlocklySource === blocklySource && !reload) return;
     if (reload) {
       workspace.highlightBlock();
       lastBlockId = undefined;
       let comment;
       while(comment = errorComments.pop()) {
-        comment.dispose();
+        if (comment && comment.block_) {
+          comment.dispose();
+        }
       }
     }
     sendMessage({
       type: "codeUpdate",
       script: getWorkspaceCode(true),
-      blocklySource: getWorkspaceCompressed(),
+      blocklySource,
       reload
     });
+    lastSentBlocklySource = blocklySource;
   }
 
   const worker = new SharedWorker(
@@ -93,7 +103,7 @@
     if (e.data.type === "blocklySource") {
       if (e.data.blocklySource) {
         try {
-          setCurrentWorkspaceXml(B64Gzip.decompress(e.data.blocklySource));
+          setWorkspaceCompressed(e.data.blocklySource);
           sendCodeToWorker(true);
         } catch (err) {
           console.log(err);
@@ -107,9 +117,12 @@
         const block = workspace.getBlockById(lastBlockId);
         block.setCommentText(e.data.msg);
         block.comment.setVisible(true);
+        block.comment.setBubbleSize(300, 100);
         errorComments.push(block.comment);
       }
-
+    } else if (e.data.type === "close") {
+      // only one open window
+      window.close();
     }
   };
 
