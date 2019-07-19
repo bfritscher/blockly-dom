@@ -33,7 +33,7 @@ onconnect = function(e) {
         blocklySource: xml[e.data.location]
       });
       // close others only one per location
-      sendMessage(ports.editors[e.data.location], {type: "close"}, port);
+      sendMessage(ports.editors[e.data.location], { type: "close" }, port);
     } else if (e.data.type === "bridgeReady") {
       if (!e.data.location) return;
       addPortToLookupByLocation(port, ports.bridges, e.data.location);
@@ -48,7 +48,10 @@ onconnect = function(e) {
       xml[e.data.location] = e.data.blocklySource;
       js[e.data.location] = e.data.script;
       sendMessage(ports.bridges[e.data.location], e.data);
-    } else if (e.data.type === "highlightBlock" || e.data.type === "scriptError") {
+    } else if (
+      e.data.type === "highlightBlock" ||
+      e.data.type === "scriptError"
+    ) {
       sendMessage(ports.editors[e.data.location], e.data);
     }
   };
