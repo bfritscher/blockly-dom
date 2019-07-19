@@ -2,7 +2,7 @@
 Create iframe button and listen to events
 */
 (function() {
-  const ME_REGEXP = /^(.+\/)blockly-dom\.js$/;
+  const ME_REGEXP = /^(.+\/)connect\.js$/;
   const DEFAULT_STYLE =
     "position: absolute; top: 0; left: 0; " +
     "visibility: hidden; overflow: hidden";
