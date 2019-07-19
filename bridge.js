@@ -45,11 +45,11 @@
         location = msg.location;
         let blocklySource = msg.blocklySource;
         let script;
-        if ( localStorage.hasOwnProperty(`${KEY_BL}${location}` )) {
-          blocklySource = localStorage.getItem(`${KEY_BL}${location}`)
+        if (localStorage.hasOwnProperty(`${KEY_BL}${location}`)) {
+          blocklySource = localStorage.getItem(`${KEY_BL}${location}`);
         }
-        if ( localStorage.hasOwnProperty(`${KEY_JS}${location}` )) {
-          script = localStorage.getItem(`${KEY_JS}${location}`)
+        if (localStorage.hasOwnProperty(`${KEY_JS}${location}`)) {
+          script = localStorage.getItem(`${KEY_JS}${location}`);
         }
         worker.port.postMessage({
           type: "bridgeReady",

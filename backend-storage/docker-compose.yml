@@ -2,10 +2,24 @@ version: "3.7"
 services:
   node:
     build: "."
-    ports:
-      - "3001:80"
+    depends_on:
+      - redis
+    restart: always
+    labels:
+      - "traefik.frontend.rule=Host:blockly.bf0.ch" # traefik will request SSL from letsencrypt
+      - "traefik.port=80" # enable this port in so traefik can proxy it
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
+      - "traefik.backend=blockly-dom-backend"
+    networks:
+      - web
+      - default
   redis:
     image: redis:5
     volumes:
       - "./data:/data"
     command: "redis-server --appendonly yes"
+    restart: always
+networks:
+  web:
+    external: true

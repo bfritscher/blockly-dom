@@ -12,7 +12,7 @@ Create iframe button and listen to events
   // our script, as inline scripts after our scripts can actually already
   // be part of document.scripts, so we'll just find the latest script
   // that matches what we think our script is called.
-  [].slice.call(document.scripts).forEach((script) => {
+  [].slice.call(document.scripts).forEach(script => {
     const match = script.src.match(ME_REGEXP);
     if (match) {
       baseURL = match[1];
@@ -28,15 +28,25 @@ Create iframe button and listen to events
 
       iframe.setAttribute("src", baseURL + "bridge.html");
 
-      window.addEventListener('error', (e) => {
-        iframe.contentWindow.postMessage({type: "scriptError", msg: e.message}, "*");
-      }, false);
+      window.addEventListener(
+        "error",
+        e => {
+          iframe.contentWindow.postMessage(
+            { type: "scriptError", msg: e.message },
+            "*"
+          );
+        },
+        false
+      );
 
       window.highlightBlock = function highlightBlock(id) {
-        iframe.contentWindow.postMessage({type: "highlightBlock", id: id}, "*");
-      }
+        iframe.contentWindow.postMessage(
+          { type: "highlightBlock", id: id },
+          "*"
+        );
+      };
 
-      window.addEventListener("message", (event) => {
+      window.addEventListener("message", event => {
         if (event.source !== iframe.contentWindow) return;
         const msg = event.data;
         if (msg.type === "init") {
@@ -48,13 +58,13 @@ Create iframe button and listen to events
           };
           iframe.contentWindow.postMessage(response, "*");
         } else if (msg.type == "reload") {
-          sessionStorage.USE_BLOCKLY_CODE = 'INDEED';
+          sessionStorage.USE_BLOCKLY_CODE = "INDEED";
           window.location.reload();
         } else if (msg.type == "script") {
           const script = document.createElement("script");
           script.appendChild(document.createTextNode(msg.script));
           document.body.appendChild(script);
-          iframe.contentWindow.postMessage({type: "scriptInjected"}, "*");
+          iframe.contentWindow.postMessage({ type: "scriptInjected" }, "*");
         }
       });
 

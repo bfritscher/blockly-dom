@@ -30,12 +30,12 @@
     setCurrentWorkspaceXml(B64Gzip.decompress(blocklySource));
   }
 
-  function getWorkspaceCode(withHighlight=false) {
+  function getWorkspaceCode(withHighlight = false) {
     if (withHighlight) {
-      Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
+      Blockly.JavaScript.STATEMENT_PREFIX = "highlightBlock(%1);\n";
     }
     const js = Blockly.JavaScript.workspaceToCode(workspace);
-    Blockly.JavaScript.STATEMENT_PREFIX = '';
+    Blockly.JavaScript.STATEMENT_PREFIX = "";
     return js;
   }
 
@@ -80,7 +80,7 @@
       workspace.highlightBlock();
       lastBlockId = undefined;
       let comment;
-      while(comment = errorComments.pop()) {
+      while ((comment = errorComments.pop())) {
         if (comment && comment.block_) {
           comment.dispose();
         }
@@ -113,7 +113,7 @@
       lastBlockId = e.data.id;
       workspace.highlightBlock(e.data.id);
     } else if (e.data.type === "scriptError") {
-      if ( lastBlockId ) {
+      if (lastBlockId) {
         const block = workspace.getBlockById(lastBlockId);
         block.setCommentText(e.data.msg);
         block.comment.setVisible(true);
@@ -127,7 +127,7 @@
   };
 
   window.addEventListener("DOMContentLoaded", () => {
-    Blockly.JavaScript.addReservedWords('highlightBlock');
+    Blockly.JavaScript.addReservedWords("highlightBlock");
     workspace = Blockly.inject(document.getElementById("blockly"), {
       path: "vendors/blockly/",
       toolbox: document.getElementById("toolbox"),
