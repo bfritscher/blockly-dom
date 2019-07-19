@@ -51,15 +51,12 @@
         if ( localStorage.hasOwnProperty(`${KEY_JS}${location}` )) {
           script = localStorage.getItem(`${KEY_JS}${location}`)
         }
-        // TODO when to send script for execution?
         worker.port.postMessage({
           type: "bridgeReady",
           location: msg.location,
           blocklySource,
           script
         });
-        // load JS script from remote?
-        // TODO if editor open use editor?
       } else if (msg.type === "scriptInjected") {
         connectedDom.style.display = "inherit";
       } else if (msg.type === "scriptError") {
