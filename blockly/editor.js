@@ -60,6 +60,16 @@
     return js;
   }
 
+  function loadSavedWorkspaceFromURL() {
+    const blocklySourceMatch = window.location.search.match(
+      /[&?]blocklySource=([A-Za-z0-9._]+)/
+    );
+
+    if (blocklySourceMatch) {
+      setWorkspaceCompressed(blocklySourceMatch[1]);
+    }
+  }
+
   function updateSourceCode() {
     const sourceCodeDom = document.getElementById("source-code-holder");
     sourceCodeDom.innerHTML = generateViewSourceCode();
@@ -86,13 +96,18 @@
         }
       }
     }
+    const script = getWorkspaceCode(true);
     sendMessage({
       type: "codeUpdate",
-      script: getWorkspaceCode(true),
+      script,
       blocklySource,
       reload
     });
     lastSentBlocklySource = blocklySource;
+    if (!window.name && reload) {
+      // execute locally Better would be in a custom iframe or with special interpreter
+      eval(script);
+    }
   }
 
   const worker = new SharedWorker(
@@ -124,6 +139,11 @@
       // only one open window
       window.close();
     }
+  };
+
+  // for local execution
+  window.highlightBlock = function highlightBlock(id) {
+    workspace.highlightBlock(id);
   };
 
   window.addEventListener("DOMContentLoaded", () => {
@@ -175,9 +195,10 @@
       sendCodeToWorker(true);
     };
     window.addEventListener("keydown", event => {
-      if (event.which == 32 && event.ctrlKey) {
+      if (event.key === "Enter" && event.ctrlKey) {
         sendCodeToWorker(true);
       }
     });
+    loadSavedWorkspaceFromURL();
   });
 })();
