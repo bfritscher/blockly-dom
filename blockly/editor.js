@@ -2,8 +2,8 @@
   let workspace;
   let lastBlockId;
   const errorComments = [];
-  // This can be used by developers from the debug console.
-  window.getWorkspaceXml = function() {
+
+  function getWorkspaceXml() {
     var xml = Blockly.Xml.workspaceToDom(workspace);
     return Blockly.Xml.domToPrettyText(xml);
   };
@@ -15,9 +15,11 @@
 
   function setCurrentWorkspaceXml(xml) {
     try {
+      workspace.clear();
       Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
     } catch (e) {
       console.log(e);
+      window.alert("error parsing blockly xml");
       workspace.clear();
     }
   }
@@ -69,6 +71,74 @@
       setWorkspaceCompressed(blocklySourceMatch[1]);
     }
   }
+
+  // svg export inspired by
+  // https://github.com/microsoft/pxt/blob/master/pxtblocks/blocklylayout.ts
+  function serializeNode(sg) {
+    return serializeSvgString(new XMLSerializer().serializeToString(sg));
+  }
+
+  function serializeSvgString(xmlString){
+    return xmlString
+        .replace(new RegExp('&nbsp;', 'g'), '&#160;'); // Replace &nbsp; with &#160; as a workaround for having nbsp missing from SVG xml
+  }
+
+  function workspaceToSvg(ws) {
+    const {x, y, width, height} = ws.getBlocksBoundingBox();
+    const sg = ws.getParentSvg().cloneNode(true);
+    sg.setAttribute('width', `${width}`);
+    sg.setAttribute('height', `${height}`);
+    sg.setAttribute('viewBox', `${x} ${y} ${width} ${height}`);
+    const bws = sg.querySelector('.blocklyWorkspace');
+    const bc = sg.querySelector('.blocklyBlockCanvas');
+    bc.removeAttribute('transform')
+    const children = [...bws.childNodes];
+    for(const node of children) {
+      bws.removeChild(node);
+    }
+    bws.appendChild(bc);
+    sg.appendChild(document.querySelector('style').cloneNode(true));
+    return {
+      svg: serializeNode(sg),
+      width,
+      height
+    };
+  }
+
+
+  function toPngAsync(width, height, pixelDensity, data){
+    return new Promise((resolve, reject) => {
+        const cvs = document.createElement("canvas");
+        const ctx = cvs.getContext("2d");
+        const img = new Image;
+
+        cvs.width = width * pixelDensity;
+        cvs.height = height * pixelDensity;
+        img.onload = function () {
+            ctx.drawImage(img, 0, 0, width, height, 0, 0, cvs.width, cvs.height);
+            const canvasdata = cvs.toDataURL("image/png");
+            resolve(canvasdata);
+        };
+        img.onerror = ev => {
+            pxt.reportError("blocks", "blocks screenshot failed");
+            resolve(undefined)
+        }
+        img.src = data;
+    });
+  }
+
+  function workspaceToPicAsync(ws) {
+    const {svg, width, height} = workspaceToSvg(ws);
+    const svgData = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svg)));
+    return toPngAsync(width, height, 4, svgData).then(pngData => {
+      return {
+        svgData,
+        pngData
+      };
+    });
+  }
+
+  // end of image export
 
   function updateSourceCode() {
     const sourceCodeDom = document.getElementById("source-code-holder");
@@ -167,10 +237,27 @@
       sendCodeToWorker(false);
     });
 
-    document.getElementById("view-source").onclick = function() {
+    let modalOpenXml;
+    document.getElementById("view-options").onclick = function() {
       updateSourceCode();
-      $("#source").modal();
+      workspaceToPicAsync(workspace).then(({svgData, pngData}) => {
+        document.getElementById("svg").src = svgData;
+        document.getElementById("svg-download").href = svgData;
+        document.getElementById("png").src = pngData;
+        document.getElementById("png-download").href = pngData;
+      });
+      modalOpenXml = getWorkspaceXml();
+      document.getElementById("xml").value = modalOpenXml;
+      document.getElementById("xml-download").href = "data:text/xml;base64," + btoa(unescape(encodeURIComponent(modalOpenXml)));
+      $("#options").modal();
     };
+
+    $("#options").on("hidden.bs.modal", function() {
+      const modalCloseXml = document.getElementById('xml').value;
+      if(modalCloseXml !== modalOpenXml) {
+        setCurrentWorkspaceXml(modalCloseXml);
+      }
+    })
 
     $(document).on("click", "code", function() {
       if (this.select) {
@@ -194,6 +281,7 @@
     document.getElementById("play").onclick = function() {
       sendCodeToWorker(true);
     };
+
     window.addEventListener("keydown", event => {
       if (event.key === "Enter" && event.ctrlKey) {
         sendCodeToWorker(true);

@@ -69,13 +69,17 @@
         z-index: 10;
       }
 
-      #source textarea {
+      #options textarea {
         font-family: monospace;
         font-size: 12px;
       }
 
       #source-code-holder {
         border: 1px solid black;
+      }
+
+      .img-preview {
+        width: 60%;
       }
     </style>
   </head>
@@ -84,25 +88,16 @@
     <div id="blockly">
       <ul class="toolbar list-unstyled list-inline">
         <li>
-          <a
-            href="./"
-            class="btn btn-outline-dark"
-            target="_blank"
-            title="Learn more about this editor"
-            ><i class="fas fa-question-circle"></i
-          ></a>
-        </li>
-        <li>
           <button
-            id="view-source"
+            id="view-options"
             class="btn btn-outline-dark"
-            title="View the JS translation"
+            title="Options to load/export"
           >
-            JS
+            <i class="fas fa-cog"></i>
           </button>
         </li>
         <li>
-          <button id="play" class="btn" title="Play (Ctrl+space)">
+          <button id="play" class="btn" title="Play (Ctrl+Enter)">
             <i class="fas fa-play"></i>
           </button>
         </li>
@@ -613,14 +608,57 @@
         </category>
       </xml>
     </div>
-    <div class="modal fade" id="source" role="dialog">
+    <div class="modal fade" id="options" role="dialog">
       <div
         class="modal-dialog modal-lg modal-dialog-scrollable"
         role="document"
       >
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">JS Source Code</h5>
+            <nav>
+              <div class="nav nav-pills" id="nav-tab" role="tablist">
+                <a
+                  class="nav-item nav-link active"
+                  id="nav-js-tab"
+                  data-toggle="pill"
+                  href="#nav-js"
+                  role="tab"
+                  aria-controls="nav-js"
+                  aria-selected="true"
+                  >JS</a
+                >
+                <a
+                  class="nav-item nav-link"
+                  id="nav-img-tab"
+                  data-toggle="pill"
+                  href="#nav-img"
+                  role="tab"
+                  aria-controls="nav-img"
+                  aria-selected="false"
+                  >IMG</a
+                >
+                <a
+                  class="nav-item nav-link"
+                  id="nav-xml-tab"
+                  data-toggle="pill"
+                  href="#nav-xml"
+                  role="tab"
+                  aria-controls="nav-xml"
+                  aria-selected="false"
+                  >XML</a
+                >
+                <a
+                  class="nav-item nav-link"
+                  id="nav-about-tab"
+                  data-toggle="pill"
+                  href="#nav-about"
+                  role="tab"
+                  aria-controls="nav-about"
+                  aria-selected="false"
+                  >About</a
+                >
+              </div>
+            </nav>
             <button
               type="button"
               class="close"
@@ -631,15 +669,83 @@
             </button>
           </div>
           <div class="modal-body">
-            <p>Here is the JS source code for your program.</p>
-            <pre><code id="source-code-holder" class="lang-javascript"></code></pre>
-          </div>
-          <div class="modal-footer">
-            <div class="checkbox w-100">
-              <label>
-                <input type="checkbox" id="include-blockly-source" /> Allow
-                others to remix my Blockly code.
-              </label>
+            <div class="tab-content" id="nav-tabContent">
+              <div
+                class="tab-pane fade show active"
+                id="nav-js"
+                role="tabpanel"
+                aria-labelledby="nav-js-tab"
+              >
+                <p>Here is the JS source code for your program.</p>
+                <pre><code id="source-code-holder" class="lang-javascript"></code></pre>
+                <div class="checkbox w-100">
+                  <label>
+                    <input type="checkbox" id="include-blockly-source" /> Allow
+                    others to remix my Blockly code.
+                  </label>
+                </div>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="nav-img"
+                role="tabpanel"
+                aria-labelledby="nav-img-tab"
+              >
+                <h5>PNG</h5>
+                <p class="text-center">
+                  <a
+                    title="click to download"
+                    id="png-download"
+                    download="blockly.png"
+                    ><img id="png" class="img-preview img-thumbnail" alt="PNG"
+                  /></a>
+                </p>
+                <h5>SVG</h5>
+                <p class="text-center">
+                  <a
+                    title="click to download"
+                    id="svg-download"
+                    download="blockly.svg"
+                    ><img id="svg" class="img-preview img-thumbnail" alt="SVG"
+                  /></a>
+                </p>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="nav-xml"
+                role="tabpanel"
+                aria-labelledby="nav-xml-tab"
+              >
+                <div class="form-group">
+                  <label for="xml"
+                    >Paste new content and close the modal to load</label
+                  >
+                  <textarea
+                    class="form-control"
+                    id="xml"
+                    rows="20"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                  ></textarea>
+                </div>
+                <p>
+                  <a id="xml-download" class="btn btn-outline-primary" download="blockly.xml"
+                    >Download</a
+                  >
+                </p>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="nav-about"
+                role="tabpanel"
+                aria-labelledby="nav-about-tab"
+              >
+                <a href="../" class="btn btn-outline-dark" target="_blank"
+                  >Learn more about this editor
+                </a>
+              </div>
             </div>
           </div>
         </div>
