@@ -585,18 +585,19 @@ Blockly.JavaScript["get_html_attribute"] = function(block) {
 
 Blockly.Blocks["dom_queryselector"] = {
   init: function() {
+    this.appendValueInput("CSS")
+    .setCheck("String")
+    .appendField("get")
+    .appendField(
+      new Blockly.FieldDropdown([
+        ["list", "querySelectorAll"],
+        ["first element", "querySelector"]
+      ]),
+      "TYPE"
+    )
+    .appendField("from");
     this.appendValueInput("ELEMENT")
       .setCheck("Element")
-      .appendField("get")
-      .appendField(
-        new Blockly.FieldDropdown([
-          ["list", "querySelectorAll"],
-          ["first element", "querySelector"]
-        ]),
-        "TYPE"
-      )
-      .appendField("from")
-      .appendField(new Blockly.FieldTextInput("CSS selector"), "CSS")
       .appendField("starting on");
     this.setInputsInline(true);
     this.setOutput(true, null);
@@ -608,17 +609,21 @@ Blockly.Blocks["dom_queryselector"] = {
 
 Blockly.JavaScript["dom_queryselector"] = function(block) {
   var type = block.getFieldValue("TYPE");
-  var css = block.getFieldValue("CSS");
+  var css = Blockly.JavaScript.valueToCode(
+    block,
+    "CSS",
+    Blockly.JavaScript.ORDER_ATOMIC
+  );
   var element = Blockly.JavaScript.valueToCode(
     block,
     "ELEMENT",
     Blockly.JavaScript.ORDER_ATOMIC
   );
-  var code = element + "." + type + "('" + css + "')";
+  var code = element + "." + type + "(" + css + ")";
   if (type === "querySelectorAll") {
     code = `[...${code}]`;
   }
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.Blocks["dom_toggle_class"] = {
