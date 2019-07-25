@@ -78,7 +78,7 @@ Create iframe button and listen to events
         window.location.reload();
       } else if (msg.type == "script") {
         if (script) {
-          document.body.removeChild(script);
+          script.remove();
         }
         script = document.createElement("script");
         script.appendChild(document.createTextNode(msg.script));
