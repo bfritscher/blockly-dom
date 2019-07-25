@@ -19,8 +19,29 @@ Create iframe button and listen to events
     }
   });
 
+
+  let iframe;
+  let script;
+
+  const observer = new MutationObserver(function(mutations) {
+    // check for removed target
+    mutations.forEach(function(mutation) {
+      if([...mutation.removedNodes].includes(iframe)){
+        init();
+      }
+    });
+  });
+
+  const config = {
+    subtree: true,
+    childList: true
+  };
+  observer.observe(document.body, config);
+
+
+
   function init() {
-    const iframe = document.createElement("iframe");
+    iframe = document.createElement("iframe");
 
     if (!baseURL) throw new Error("baseURL not found");
 
@@ -56,7 +77,10 @@ Create iframe button and listen to events
         sessionStorage.USE_BLOCKLY_CODE = "INDEED";
         window.location.reload();
       } else if (msg.type == "script") {
-        const script = document.createElement("script");
+        if (script) {
+          document.body.removeChild(script);
+        }
+        script = document.createElement("script");
         script.appendChild(document.createTextNode(msg.script));
         document.body.appendChild(script);
         iframe.contentWindow.postMessage({ type: "scriptInjected" }, "*");
