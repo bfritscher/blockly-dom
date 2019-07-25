@@ -630,7 +630,15 @@ Blockly.Blocks["dom_toggle_class"] = {
   init: function() {
     this.appendValueInput("CLASS")
       .setCheck(null)
-      .appendField("toggle class");
+      .appendField(
+        new Blockly.FieldDropdown([
+          ["toggle", "toggle"],
+          ["add", "add"],
+          ["remove", "remove"]
+        ]),
+        "TYPE"
+      )
+      .appendField("class");
     this.appendValueInput("ELEMENT")
       .setCheck("Element")
       .appendField("on element");
@@ -644,6 +652,7 @@ Blockly.Blocks["dom_toggle_class"] = {
 };
 
 Blockly.JavaScript["dom_toggle_class"] = function(block) {
+  var type = block.getFieldValue("TYPE");
   var value_class = Blockly.JavaScript.valueToCode(
     block,
     "CLASS",
@@ -654,7 +663,7 @@ Blockly.JavaScript["dom_toggle_class"] = function(block) {
     "ELEMENT",
     Blockly.JavaScript.ORDER_ATOMIC
   );
-  var code = element + ".classList.toggle(" + value_class + ");\n";
+  var code = element + ".classList." + type + "(" + value_class + ");\n";
   return code;
 };
 
