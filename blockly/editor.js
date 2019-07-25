@@ -3,6 +3,10 @@
   let lastBlockId;
   const errorComments = [];
   const BLOCKLY_LAST_LOCAL_XML = "BLOCKLY_LAST_LOCAL_XML";
+  let options = {
+    withHighlight: true
+  };
+  Object.assign(options, JSON.parse(localStorage.getItem("BLOCKLY_OPTIONS") || "{}"));
 
   function getWorkspaceXml() {
     var xml = Blockly.Xml.workspaceToDom(workspace);
@@ -174,7 +178,8 @@
         }
       }
     }
-    const script = getWorkspaceCode(true);
+
+    const script = getWorkspaceCode(options.withHighlight);
     sendMessage({
       type: "codeUpdate",
       script,
