@@ -523,7 +523,13 @@
           <block type="console_log"></block>
           <block type="create_element"></block>
           <block type="body_element"></block>
-          <block type="get_element_by_id"></block>
+          <block type="get_element_by_id">
+            <value name="ID">
+                <shadow type="text">
+                  <field name="TEXT">foo</field>
+                </shadow>
+            </value>
+          </block>
           <block type="dom_queryselector">
             <value name="ELEMENT">
               <shadow type="body_element"></shadow>

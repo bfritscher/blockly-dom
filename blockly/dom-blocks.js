@@ -48,18 +48,18 @@ Blockly.JavaScript["query_selector"] = function(block) {
 Blockly.Blocks["get_element_by_id"] = {
   init: function() {
     this.setOutput(true, "Element");
-    this.appendDummyInput()
-      .appendField("the element with id")
-      .appendField(new Blockly.FieldTextInput("foo"), "ID");
+    this.appendValueInput("ID")
+    .setCheck("String")
+    .appendField("the element with id");
     this.setColour(Blockly.Msg["DOM_HUE"]);
   }
 };
 
 Blockly.JavaScript["get_element_by_id"] = function(block) {
+  var id = Blockly.JavaScript.valueToCode(block, "ID", Blockly.JavaScript.ORDER_ATOMIC);
+  //Blockly.JavaScript.quote_(block.getFieldValue("ID"))
   return [
-    "document.getElementById(" +
-      Blockly.JavaScript.quote_(block.getFieldValue("ID")) +
-      ")",
+    "document.getElementById(" + id + ")",
     Blockly.JavaScript.ORDER_ATOMIC
   ];
 };
