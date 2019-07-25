@@ -6,6 +6,8 @@ Because learning the DOM and JavaScript syntax at the same time can be overwhelm
 
 ## Usage
 
+### as DOM editor in a third party site
+
 add this script to the webpage (JSBin, codesandbox.io, ...)
 ```html
 <script src="//bfritscher.github.io/blockly-dom/connect.js"></script>
@@ -14,6 +16,12 @@ add this script to the webpage (JSBin, codesandbox.io, ...)
 Then a *Open Blockly Editor* button should appear on the lower left.
 
 This should only be used to learn, not for production!
+
+### directly
+
+open editor directly or in iframe [//bfritscher.github.io/blockly-dom/blockly/editor.html](//bfritscher.github.io/blockly-dom/blockly/editor.html)
+
+initial data can be provided via `?blocklySource=...Blockly code from options dialog...`
 
 ## Technology
 

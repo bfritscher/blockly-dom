@@ -2,6 +2,7 @@
   let workspace;
   let lastBlockId;
   const errorComments = [];
+  const BLOCKLY_LAST_LOCAL_XML = "BLOCKLY_LAST_LOCAL_XML";
 
   function getWorkspaceXml() {
     var xml = Blockly.Xml.workspaceToDom(workspace);
@@ -60,6 +61,12 @@
         '";';
     }
     return js;
+  }
+
+  function loadSavedWorkspaceFromLocalStorage() {
+    if (BLOCKLY_LAST_LOCAL_XML in localStorage) {
+      setWorkspaceCompressed(localStorage.getItem(BLOCKLY_LAST_LOCAL_XML));
+    }
   }
 
   function loadSavedWorkspaceFromURL() {
@@ -156,6 +163,7 @@
   function sendCodeToWorker(reload = false) {
     const blocklySource = getWorkspaceCompressed();
     if (lastSentBlocklySource === blocklySource && !reload) return;
+    localStorage.setItem(BLOCKLY_LAST_LOCAL_XML, blocklySource);
     if (reload) {
       workspace.highlightBlock();
       lastBlockId = undefined;
@@ -287,6 +295,10 @@
         sendCodeToWorker(true);
       }
     });
-    loadSavedWorkspaceFromURL();
+
+    if (!window.name) {
+      loadSavedWorkspaceFromLocalStorage();
+      loadSavedWorkspaceFromURL();
+    }
   });
 })();
