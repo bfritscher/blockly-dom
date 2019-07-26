@@ -33,8 +33,9 @@ Create iframe button and listen to events
   });
 
   const config = {
-    subtree: true,
-    childList: true
+    subtree: false,
+    childList: true,
+    attributes: false
   };
   observer.observe(document.body, config);
 
