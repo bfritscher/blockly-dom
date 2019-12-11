@@ -42,6 +42,10 @@ Create iframe button and listen to events
 
 
   function init() {
+    if (document.referrer && document.referrer.includes("s/github")) {
+        document.body.innerHTML = "<h1>Please, first fork the project</h1>";
+      return
+    }
     iframe = document.createElement("iframe");
 
     if (!baseURL) throw new Error("baseURL not found");
