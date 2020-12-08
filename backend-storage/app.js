@@ -3,6 +3,17 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const redis = require("redis");
 
+const BLOCK_LIST = [
+  "https://mzggh.csb.app/",
+  "https://9q1we.csb.app/",
+  "https://npphq.csb.app/",
+  "https://x3px4.csb.app/",
+  "https://50oqx.csb.app/",
+  "https://djo51.csb.app/",
+  "https://mj5jy.csb.app/",
+  "https://lmgtg.csb.app/",
+];
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -33,6 +44,10 @@ app.post("/save", function(req, res, next) {
 });
 
 app.post("/load", function(req, res, next) {
+  if (BLOCK_LIST.includes(req.body.location)) {
+    res.sendStatus(401);
+    return;
+  }
   client.get(req.body.location, (err, reply) => {
     if (err) {
       res.status(500);
