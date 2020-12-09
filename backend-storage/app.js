@@ -39,8 +39,9 @@ app.post("/save", function(req, res, next) {
       console.log('wrote', data.location);
       res.end()
     });
+    return;
   }
-
+  res.sendStatus(401);
 });
 
 app.post("/load", function(req, res, next) {
