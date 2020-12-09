@@ -304,6 +304,9 @@
     if (!window.name) {
       loadSavedWorkspaceFromLocalStorage();
       loadSavedWorkspaceFromURL();
+      document.title = "Blockly Editor [not connected]";
+    } else {
+      document.title = "Blockly Editor for " + window.name;
     }
   });
 })();
